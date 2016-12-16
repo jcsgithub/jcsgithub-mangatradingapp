@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="NightlifeApp">
+<html lang="en" ng-app="MangaTradingApp">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Nightlife Coordination App by jcsgithub</title>
+    <title>Manga Trading App by jcsgithub</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -30,7 +30,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Nightlife Coordination App</a>
+            <a class="navbar-brand" href="#">Manga Trading App</a>
         </div>
 		
         <div id="navbar" class="navbar-collapse collapse">
@@ -43,7 +43,8 @@
             <!-- Navbar authorized -->
             <ul id="authorized-navbar" class="nav navbar-nav navbar-right hide">
                 <li class="active"><a href="#">Home</a></li>
-                <li><a href="/mybars">My Bars</a></li>
+                <li><a href="/search">Search Manga</a></li>
+                <li><a href="/mymanga">My Manga</a></li>
                 <li><a href="/logout">Sign out</a></li>
             </ul>
         </div>
@@ -56,68 +57,13 @@
         <p class="text-small">This is one of the project in Freecodecamp's curriculum, "Build a Nightlife Coordination App"</p>
         <p class="text-small">Login to add some bars that you plan on going. Or search for nearby bars, review it, and see for yourself!</p>
     </div>
-    
-    <div class="searchbar row">
-    	<div class="col-md-3 col-xs-1"></div>
-    	<div class="col-md-6 col-xs-10">
-    		<form ng-submit="search(searchTxt)">
-    			<div class="input-group">
-	    			<span class="input-group-addon" id="basic-addon1"><i class="fa fa-car" aria-hidden="true"></i></span>
-					<input ng-model="searchTxt" ng-disabled="loader.isSearchingBars" required type="text" class="form-control" placeholder="Where is the bar located?">
-					<span class="input-group-btn">
-						<button ng-disabled="loader.isSearchingBars" class="btn btn-default" type="submit">Go!</button>
-					</span>
-				</div>
-    		</form>
-    	</div>
-    	<div class="col-md-3 col-xs-1"></div>
-    </div>
-    
-    <div class="alert alert-success alert-add-bar">Added bar success!</div>
-	<div class="alert alert-success alert-delete-bar">Delete bar success!</div>
-    
-    <h4 class="bars-found text-center" ng-if="loader.isAddingBar" ng-cloak>Adding bar <i class="fa fa-spinner fa-spin"></i></h4>
-	<h4 class="bars-found text-center" ng-if="loader.isDeletingBar" ng-cloak>Deleting bar <i class="fa fa-spinner fa-spin"></i></h4>
-    <h4 class="bars-found text-center" ng-if="loader.isSearchingBars" ng-cloak>Searching for bars <i class="fa fa-spinner fa-spin"></i></h4>
-    <h4 class="bars-found text-center" ng-if="!loader.isSearchingBars && hasSearched && !bars.length" ng-cloak>NO BARS FOUND</h4>
-    
-    <div class="bars row hidden">
-    	<div class="col-md-1"></div>
-    	
-    	<div class="col-md-10 col-xs-12">
-    		
-    		<!-- START BARS TEMPLATE -->
-    		<div ng-hide="loader.isAddingBar || loader.isDeletingBar" class="bar row" ng-repeat="data in bars track by $index">
-    			<div class="col-sm-3 col-xs-4">
-    				<a ng-href="{{data.url}}" target="_blank"><img class="bar-img img-responsive " ng-src="{{data.image_url || '/public/img/no-image-found.png'}}" alt="Bar Image"></img></a>
-    			</div>
-    			<div class="col-sm-9 col-xs-8">
-    				<a ng-href="{{data.url}}" target="_blank"><h4 class="bar-name">{{data.name}}</h4></a>
-	    			<p class="bar-description">{{data.review || 'No review available.'}}</p>
-	    			<h5 ng-if="!data.attendees || data.attendees.length == 0" class="bar-count text-danger">No one is going yet</h5>
-	    			<h5 ng-if="data.attendees.length == 1" class="bar-count text-success">1 person is going</h5>
-	    			<h5 ng-if="data.attendees.length > 1" class="bar-count text-success">{{data.attendees.length}} people are going</h5>
-	    			<button ng-hide="userObject.bars.indexOf(data.id) > -1" ng-click="addBar(data.id, $index)" class="add-bar btn btn-default">ADD TO BARS LIST</button>
-	    			<button ng-if="isLoggedIn && userObject.bars.indexOf(data.id) > -1" ng-click="deleteBar(data.id, $index)" class="delete-bar btn btn-danger">DELETE FROM BARS LIST</button>
-    			</div>
-    		</div>
-    		<!-- END BARS TEMPLATE -->
-    		
-    	</div>
-    	
-    	<div class="col-md-1"></div>
-    </div>
-</div>
-
-<div class="container">
-	
 </div>
 
 <footer class="footer">
 	<div class="container">
 		<span>This app is built by <a href="https://www.freecodecamp.com/jcsgithub" target="_blank">jcsgithub</a> of Freecodecamp.</span><br/>
-		<span>Github repository: <a href="https://github.com/jcsgithub/jcsgithub-nightlifeapp" target="_blank">jcsgithub/jcsgithub-nightlifeapp</a></span><br/>
-		<span>Used <a href="https://www.yelp.com/developers/">Yelp Fusion API</a> for the application's data.</span>
+		<span>Github repository: <a href="https://github.com/jcsgithub/jcsgithub-mangatradingapp" target="_blank">jcsgithub/jcsgithub-mangatradingapp</a></span><br/>
+		<span>Used <a href="https://market.mashape.com/doodle/manga-scraper" target="_blank">Manga Scraper API</a> for the application's data.</span>
 	</div>
 </footer>
 

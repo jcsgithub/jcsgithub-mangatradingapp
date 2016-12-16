@@ -26,47 +26,6 @@ body {
 
 
 
-/****** Bars ******/
-.bars-found {
-    margin: 40px;    
-}
-
-.bars {
-    margin-top: 30px;
-}
-
-.bar {
-    margin-bottom: 50px;
-}
-
-.bar img {
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border: 1px solid #aaa;
-    height: 150;
-    margin: 0 auto;
-    position: relative;
-    width: 150;
-}
-
-.bar-name {
-    margin-top: 0;
-}
-
-.bar-description {
-    
-}
-
-.bar-count {
-    
-}
-
-.add-bar, .delete-bar, .alert-add-bar, .alert-delete-bar {
-    margin-top: 15px;
-}
-
-
 /****** Footer ******/
 footer {
 	margin: 100px 0 15px 0;
@@ -90,12 +49,3 @@ footer {
 [ng-cloak] {
     display: none !important;
 }
-
-
-
-/****** Media Queries ******/
-/*@media (max-width: 767px) {*/
-/*    .bar-name {*/
-/*        margin-top: 15px;*/
-/*    }*/
-/*}*/

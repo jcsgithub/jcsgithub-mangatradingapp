@@ -32,10 +32,10 @@ module.exports = function (passport) {
 				} else {
 					var newUser = new User();
 
-					newUser.bars = [];
 					newUser.facebook.id = profile.id;
 					newUser.facebook.displayName = profile.displayName;
-					newUser.lastSearch = '';
+					newUser.location = { city: '', province: '', region: '' };
+					newUser.manga = [];
 
 					newUser.save(function (err) {
 						if (err) {

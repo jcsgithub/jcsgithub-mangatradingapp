@@ -1,5 +1,5 @@
-# Nightlife Coordination App
+# Manga Trading App
 
 ## Overview
 
-This app is made using MEAN stack. For the completion on one of Freecodecamp's Dynamic Web Application Projects, [Build a Nightlife Coordination App](httpshttps://www.freecodecamp.com/challenges/build-a-nightlife-coordination-app).
+This app is made using MEAN stack. For the completion on one of Freecodecamp's Dynamic Web Application Projects, a quite similar app to [Manage a Book Trading Club](https://www.freecodecamp.com/challenges/manage-a-book-trading-club).

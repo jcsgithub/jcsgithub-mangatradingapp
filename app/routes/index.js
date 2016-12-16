@@ -4,11 +4,9 @@ var path = process.cwd();
 
 module.exports = function (app, passport) {
 	// Paths to import
-	var BarHandler = require(path + '/app/controllers/barHandler.server.js');
 	var UserHandler = require(path + '/app/controllers/userHandler.server.js');
 	
 	// Objects imported
-	var barHandler = new BarHandler();
 	var userHandler = new UserHandler();
 	
 	
@@ -46,23 +44,12 @@ module.exports = function (app, passport) {
 			req.logout();
 			res.redirect('/');
 		});
-		
-	app.route('/mybars')
-		.get(isLoggedIn, function (req, res) {
-			res.sendFile(path + '/public/mybars.html');
-		});
 
 		
 		
 		
 
 	/***** APIs *****/
-    app.route('/api/bars')
-        .get(barHandler.getBars);
-        
-    app.route('/api/bars/:id')
-        .get(barHandler.getBarById);
-        
     app.route('/api/user')
         .get(isAuthorized, function (req, res) {
         	var userData = {
@@ -72,13 +59,6 @@ module.exports = function (app, passport) {
         	};
             res.json(userData);
         });
-        
-    app.route('/api/user/bars')
-        .post(isAuthorized, userHandler.updateBars, barHandler.addOrUpdateBarAttendees)
-        .put(isAuthorized, userHandler.updateBars, barHandler.deleteBarAttendee);
-        
-    app.route('/api/yelp/business/:id')
-        .get(barHandler.getYelpBusiness);
         
     
     
