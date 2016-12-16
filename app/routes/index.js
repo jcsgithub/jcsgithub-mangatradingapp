@@ -4,9 +4,11 @@ var path = process.cwd();
 
 module.exports = function (app, passport) {
 	// Paths to import
+	var MangaHandler = require(path + '/app/controllers/mangaHandler.server.js');
 	var UserHandler = require(path + '/app/controllers/userHandler.server.js');
 	
 	// Objects imported
+	var mangaHandler = new MangaHandler();
 	var userHandler = new UserHandler();
 	
 	
@@ -50,6 +52,9 @@ module.exports = function (app, passport) {
 		
 
 	/***** APIs *****/
+	app.route('/api/search/:q')
+		.get(mangaHandler.search);
+	
     app.route('/api/user')
         .get(isAuthorized, function (req, res) {
         	var userData = {

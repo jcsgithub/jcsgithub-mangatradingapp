@@ -34,8 +34,6 @@ module.exports = function (passport) {
 
 					newUser.facebook.id = profile.id;
 					newUser.facebook.displayName = profile.displayName;
-					newUser.location = { city: '', province: '', region: '' };
-					newUser.manga = [];
 
 					newUser.save(function (err) {
 						if (err) {
