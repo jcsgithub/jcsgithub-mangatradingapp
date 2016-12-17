@@ -33,6 +33,36 @@ body {
 
 
 
+/****** Manga/Add ******/
+.manga {
+    margin: 40px;
+}
+
+.manga img {
+    border: 1px solid #ddd;
+    margin: 10px auto 0 auto;
+}
+
+.manga-add, .manga-delete {
+    border-radius: 0;
+    margin-top: 15px;
+}
+
+.manga-search {
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+}
+
+.manga-add-labels {
+    margin: 40px;
+}
+
+.manga-info {
+    font-size: 14px;
+}
+
+
 /****** Footer ******/
 footer {
 	margin: 100px 0 15px 0;
@@ -43,6 +73,10 @@ footer {
 /****** Others ******/
 .hidden {
     display: none !important;
+}
+
+.margin-small-top {
+    margin-top: 10px;
 }
 
 .show {

@@ -27,8 +27,11 @@
             var src = 'https://raw.githubusercontent.com/clavearnel/philippines-region-province-citymun-brgy/master/json'
             
             $q.all([
+               
                // get user
                User.get().$promise.then(function (res) {
+                  $("#authorized-navbar").removeClass("hide");
+                  
                   return(res);
                }, function (err) {
                   // no user found
@@ -57,6 +60,7 @@
                   }, function (err) {
                      console.log('cities err', err)
                   })
+                  
             ]).then(function (res) {
                $('#form-loader').addClass('hidden');
                $('#form-account').removeClass('hidden');
