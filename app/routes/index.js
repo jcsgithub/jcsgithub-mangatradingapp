@@ -40,6 +40,11 @@ module.exports = function (app, passport) {
 		.get(function (req, res) {
 			res.sendFile(path + '/public/index.html');
 		});
+		
+	app.route('/account')
+		.get(isLoggedIn, function (req, res) {
+			res.sendFile(path + '/public/account.html');
+		});
 
 	app.route('/logout')
 		.get(function (req, res) {
@@ -59,12 +64,13 @@ module.exports = function (app, passport) {
         .get(isAuthorized, function (req, res) {
         	var userData = {
         		_id: req.user._id,
-				bars: req.user.bars,
-				displayName: req.user.facebook.displayName
+				displayName: req.user.facebook.displayName,
+				location: req.user.location,
+				manga: req.user.manga
         	};
             res.json(userData);
-        });
-        
+        })
+        .put(isAuthorized, userHandler.updateAccount);
     
     
     

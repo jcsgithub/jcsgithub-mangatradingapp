@@ -18,7 +18,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body ng-controller="indexController">
+<body ng-controller="accountController">
 	
 <!-- Navbar -->
 <nav class="navbar navbar-default navbar-static-top">
@@ -30,19 +30,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Manga Trading App</a>
+            <a class="navbar-brand" href="/">Manga Trading App</a>
         </div>
 		
         <div id="navbar" class="navbar-collapse collapse">
-            <!-- Navbar unauthorized -->
-            <ul id="unauthorized-navbar" class="nav navbar-nav navbar-right hide">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a ng-href="/auth/facebook" class="facebook-login">Sign in with Facebook</a></li>
-            </ul>
-            
-            <!-- Navbar authorized -->
-            <ul id="authorized-navbar" class="nav navbar-nav navbar-right hide">
-                <li class="active"><a href="#">Home</a></li>
+            <ul id="authorized-navbar" class="nav navbar-nav navbar-right">
+                <li><a href="/">Home</a></li>
                 <li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Trade <span class="caret"></span></a>
 					<ul class="dropdown-menu">
@@ -60,71 +53,76 @@
 				</li>
 				
 				<!-- ACCOUNT/LOGOUT SM -->
-                <li class="hidden-xs"><a href="/account" data-toggle="tooltip" data-placement="bottom" title="Settings"><i class="fa fa-cog" aria-hidden="true"></i></a></li>
+                <li class="hidden-xs active"><a href="#" data-toggle="tooltip" data-placement="bottom" title="Settings"><i class="fa fa-cog" aria-hidden="true"></i></a></li>
                 <li class="hidden-xs"><a href="/logout" data-toggle="tooltip" data-placement="bottom" title="Sign out"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
                 
                 <!-- ACCOUNT/LOGOUT XS -->
-                <li class="visible-xs"><a href="/account">Account</a></li>
+                <li class="visible-xs active"><a href="#">Account</a></li>
                 <li class="visible-xs"><a href="/logout">Sign Out</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
-<div class="container">
-    <div class="jumbotron text-center">
-        <p><h2>Manga Trading App</h2></p>
-        <p class="text-small">A simple trading app built for Filipino manga otaku.</p>
-    </div>
-</div>
+
 
 <div class="container">
-	<div class="features text-center">
-		<h3 class="text-info">Some stuffs you can do here</h3>
-		<span class="text-danger">NOTE:</span> <span>Only authorized users are allowed to access this features.</span>
-		<br/><br/><br/>
-		
-		<div class="row">
-			<div class="col-sm-2"></div>
-			<div class="col-sm-8">
-				<p>Make your collection manga available for trade.</p>
+	<h4 id="form-loader">Loading data <i class="fa fa-spinner fa-spin"></i></h4>
+	
+	<div class="alert alert-success alert-save hidden">Changes saved!</div>
+	
+	<div id="form-account" class="hidden">
+		<h4 class="text-info">Update your account below.</h4>
+	    
+	    <form class="form-horizontal" ng-submit="save()">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Name:</label>
+				<div class="col-sm-10">
+					<input ng-model="user.displayName" ng-disabled="loader.isSaving" required type="text" class="form-control" placeholder="Name">
+				</div>
 			</div>
-			<div class="col-sm-2"></div>
-		</div>
-		
-		<div class="row">
-			<div class="col-sm-2"></div>
-			<div class="col-sm-8">
-				<p>Search and view a manga in your "want list".</p>
+	    	
+	    	<div class="form-group">
+				<label class="control-label col-sm-2">Region:</label>
+				<div class="col-sm-10">
+					<select ng-model="user.location.region" ng-change="regionChanged()" ng-disabled="loader.isSaving" required class="form-control">
+						<option value="" ng-if="!user.location.region" disabled>-- SELECT YOUR REGION --</option>
+						<option ng-repeat="data in locations.region" value="{{data.regCode}}">{{data.regDesc}}</option>
+					</select>
+				</div>
 			</div>
-			<div class="col-sm-2"></div>
-		</div>
-		
-		<div class="row">
-			<div class="col-sm-2"></div>
-			<div class="col-sm-8">
-				<p>Request a trade with other manga otakus like you.</p>
+			
+			<div class="form-group">
+				<label class="control-label col-sm-2">Province:</label>
+				<div class="col-sm-10">
+					<select ng-model="user.location.province" ng-change="provinceChanged()" ng-disabled="loader.isSaving" required class="form-control">
+						<option value="" ng-if="!user.location.province" disabled>-- SELECT YOUR PROVINCE --</option>
+						<option ng-repeat="data in locations.province" value="{{data.provCode}}">{{data.provDesc}}</option>
+					</select>
+				</div>
 			</div>
-			<div class="col-sm-2"></div>
-		</div>
-		
-		<div class="row">
-			<div class="col-sm-2"></div>
-			<div class="col-sm-8">
-				<p>Your very own dashboard to manage stuffs.</p>
+			
+			<div class="form-group">
+				<label class="control-label col-sm-2">City:</label>
+				<div class="col-sm-10">
+					<select ng-model="user.location.city" ng-disabled="loader.isSaving" required class="form-control">
+						<option value="" ng-if="!user.location.city" disabled>-- SELECT YOUR CITY --</option>
+						<option ng-repeat="data in locations.city" value="{{data.citymunCode}}">{{data.citymunDesc}}</option>
+					</select>
+				</div>
 			</div>
-			<div class="col-sm-2"></div>
-		</div>
+			
+			<div class="form-group"> 
+				<div class="col-sm-offset-2 col-sm-10">
+					<button ng-disabled="loader.isSaving" type="submit" class="btn btn-primary">
+						<span ng-if="!loader.isSaving">Save Changes</span>
+						<span ng-if="loader.isSaving">Saving <i class="fa fa-spinner fa-spin"></i></span>
+					</button>
+				</div>
+			</div>
+		</form>
 	</div>
 </div>
-
-<footer class="footer">
-	<div class="container">
-		<span>This app is built by <a href="https://www.freecodecamp.com/jcsgithub" target="_blank">jcsgithub</a> of Freecodecamp.</span><br/>
-		<span>Github repository: <a href="https://github.com/jcsgithub/jcsgithub-mangatradingapp" target="_blank">jcsgithub/jcsgithub-mangatradingapp</a></span><br/>
-		<span>Used <a href="https://market.mashape.com/doodle/manga-scraper" target="_blank">Manga Scraper API</a> for the application's data.</span>
-	</div>
-</footer>
 
 <!-- Bootstrap & JQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -135,6 +133,6 @@
 <script type="text/javascript" src="https://code.angularjs.org/1.6.0-rc.2/angular-resource.min.js"></script>
 
 <!-- Controllers -->
-<script type="text/javascript" src="controllers/indexController.client.js"></script>
+<script type="text/javascript" src="controllers/accountController.client.js"></script>
 </body>
 </html>
