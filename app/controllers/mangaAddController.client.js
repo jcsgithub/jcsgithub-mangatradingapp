@@ -77,20 +77,38 @@
             e.preventDefault();
          };
          
-         $scope.$watch('addVolumes', function(newValue, oldValue){
-            // 1st character should be a digit
-            if (newValue) 
-               if (newValue.length === 1) 
-                  if (!/[0-9]/.test(newValue)) 
-                     $scope.addVolumes = '';
+         $scope.checkVolumes = function () {
+            console.log($scope.addVolumes)
+         };
+         
+         $scope.$watch('addVolumes', function (newValue, oldValue) {
             
-            // prevent consecutive comma/hyphen
-            if (oldValue) 
-               $scope.addVolumes = $scope.addVolumes
-                  .replace(/,,/g, ',')
-                  .replace(/--/g, '-')
-                  .replace(/,-/g, ',')
-                  .replace(/-,/g, '-');
+            if (newValue) {
+               var lastCsv = $scope.addVolumes.split(',').pop();
+               
+               if (lastCsv.length === 1) 
+                  if (!/[1-9]/.test(lastCsv)) 
+                     $scope.addVolumes = $scope.addVolumes.slice(0, -1); // 1st character in a csv should be a digit (1-9)
+                     
+               var volumeRange = lastCsv.split('-');
+               if (volumeRange.length > 2) {
+                  $scope.addVolumes = $scope.addVolumes.slice(0, -1); // prevents more than one hyphen in a csv
+               } else if (volumeRange.length === 2) {
+                  var rightFirstDigit = volumeRange[1].split('').shift();
+                  if (rightFirstDigit && rightFirstDigit === '0')
+                     $scope.addVolumes = $scope.addVolumes.slice(0, -1); // 1st character of the right number should be a digit (1-9)
+               }
+                     
+               if (oldValue) {
+                  // prevent consecutive comma/hyphen
+                  $scope.addVolumes = $scope.addVolumes
+                     .replace(/,,/g, ',')
+                     .replace(/--/g, '-')
+                     .replace(/,-/g, ',')
+                     .replace(/-,/g, '-');
+               }
+            }
+            
          }, true);
          
          
