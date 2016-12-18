@@ -49,6 +49,10 @@ body {
 }
 
 .manga-search {
+    margin-bottom: 20px;
+}
+
+.manga-template {
     border: 1px solid #ccc;
     margin-bottom: 20px;
     padding-bottom: 20px;

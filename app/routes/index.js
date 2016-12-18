@@ -62,7 +62,7 @@ module.exports = function (app, passport) {
 		
 
 	/***** APIs *****/
-	app.route('/api/manga/:mangaId')
+	app.route('/api/manga')
 		.get(isAuthorized, mangaHandler.getManga);
 		
 	app.route('/api/search/:q')
@@ -79,6 +79,11 @@ module.exports = function (app, passport) {
             res.json(userData);
         })
         .put(isAuthorized, userHandler.updateAccount);
+    
+	app.route('/api/user/manga')
+		.delete(isAuthorized, userHandler.deleteManga)
+		.put(isAuthorized, userHandler.updateManga);
+    
     
     
     

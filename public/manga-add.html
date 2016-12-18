@@ -67,7 +67,7 @@
 
 
 <div class="container">
-	<div class="row">
+	<div class="manga-search row">
     	<div class="col-md-3 col-xs-1"></div>
     	<div class="col-md-6 col-xs-10">
 			<div class="input-group">
@@ -95,15 +95,15 @@
 	<h4 class="manga-add-labels text-center" ng-if="loader.isDeleting" ng-cloak>Deleting manga <i class="fa fa-spinner fa-spin"></i></h4>
 	<h4 class="manga-add-labels text-center text-danger" ng-show="noResults" ng-cloak><i class="fa fa-close"></i> No results found</h4>
 	
-	<div class="alert alert-success alert-add hidden">Manga added!</div>
-	<div class="alert alert-success alert-delete hidden">Manga deleted!</div>
+	<div class="alert alert-success alert-add hide">Manga added!</div>
+	<div class="alert alert-success alert-delete hide">Manga deleted!</div>
 	
 	<div class="manga row">
 		<div class="col-md-1"></div>
 		<div class="col-md-10 col-xs-12">
 			
 			<!-- START SELECTED MANGA TEMPLATE -->
-    		<div ng-show="selectedManga" class="manga-search row" ng-cloak>
+    		<div ng-if="selectedManga && !loader.isAdding && !loader.isDeleting" class="manga-template row" ng-cloak>
     			<div class="col-sm-3 col-xs-4">
     				<img class="img-responsive " ng-src="{{selectedManga.cover || '/public/img/no-image-found.png'}}" alt="Manga Cover"></img>
     			</div>
@@ -111,8 +111,8 @@
     				<h4 class="manga-title text-info" ng-cloak>{{selectedManga.name}}</h4>
 	    			<p class="margin-small-top"><strong>Summary</strong></p>
                     <div class="manga-info" markdown="selectedManga.info"></div>
-	    			<button ng-click="add(selectedManga.mangaId)" class="manga-add btn btn-default">ADD TO COLLECTION</button>
-	    			<button ng-click="delete(selectedManga.mangaId)" class="manga-delete btn btn-default">DELETE FROM COLLECTION</button>
+	    			<button ng-show="user.manga.indexOf(selectedManga.mangaId) == -1" ng-click="add()" class="manga-add btn btn-default">ADD TO COLLECTION</button>
+	    			<button ng-show="user.manga.indexOf(selectedManga.mangaId) != -1" ng-click="delete()" class="manga-delete btn btn-danger">DELETE FROM COLLECTION</button>
     			</div>
     		</div>
     		<!-- END SELECTED MANGA TEMPLATE -->

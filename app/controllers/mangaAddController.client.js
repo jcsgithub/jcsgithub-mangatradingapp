@@ -30,14 +30,15 @@
          
          var cities = [], provinces = [];
          
-         var Manga = $resource('/api/manga/:mangaId');
+         var Manga = $resource('/api/manga');
          var Search = $resource('/api/search/:q');
-         var User = $resource(
-            '/api/user',
+         var User = $resource('/api/user');
+         var UserManga = $resource(
+            '/api/user/manga',
             {},
             { update: { method: 'PUT' } }
          );
-         
+            
          getUser ();
          
          
@@ -53,15 +54,53 @@
             })
          }
          
+         $scope.searchKeydown = function (event) {
+            // if (event.keyCode === 13)
+               
+         };
+         
          
          
          /***** USER INTERACTIONS *****/
          $scope.add = function () {
             $scope.loader.isAdding = true;
+            
+            UserManga.update({ mangaId: $scope.selectedManga.mangaId }).$promise.then(function () {
+               $scope.loader.isAdding = false;
+               
+               $scope.user.manga.push($scope.selectedManga.mangaId);
+               
+               $(".alert-add").removeClass('hide');
+               $(".alert-add").alert();
+               $(".alert-add").fadeTo(2000, 500).slideUp(500, function(){
+                  $(".alert-add").slideUp(500);
+               });
+            }, function (err) {
+               console.log('UserManga.update error', err)
+               if (err.status == 408)
+                  alert('Oops! Something went wrong with your connection. Try again.')
+            });
          };
          
          $scope.delete = function () {
             $scope.loader.isDeleting = true;
+            
+            UserManga.delete({ mangaId: $scope.selectedManga.mangaId }).$promise.then(function () {
+               $scope.loader.isDeleting = false;
+               
+               var index = $scope.user.manga.indexOf($scope.selectedManga.mangaId);
+               $scope.user.manga.splice(index, 1);
+               
+               $(".alert-delete").removeClass('hide');
+               $(".alert-delete").alert();
+               $(".alert-delete").fadeTo(2000, 500).slideUp(500, function(){
+                  $(".alert-delete").slideUp(500);
+               });
+            }, function (err) {
+               console.log('UserManga.delete error', err)
+               if (err.status == 408)
+                  alert('Oops! Something went wrong with your connection. Try again.')
+            });
          };
          
          $scope.getManga = function (val) {
@@ -84,6 +123,7 @@
             Manga.get({ mangaId: item.mangaId }).$promise.then(function (res) {
                $scope.loader.isLoadingManga = false;
                $scope.selectedManga = res;
+               console.log(res)
             }, function (err) {
                console.log('Manga.get error', err)
                if (err.status == 408)

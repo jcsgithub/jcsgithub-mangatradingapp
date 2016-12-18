@@ -4,12 +4,13 @@ var unirest = require('unirest');
 
 function MangaHandler () {
     this.getManga = function (req, res) {
-        var data = req.params;
+        var data = req.query;
         
         unirest.get("https://doodle-manga-scraper.p.mashape.com/mangafox.me/manga/" + data.mangaId)
             .header("X-Mashape-Key", process.env.MANGA_SCRAPER_TOKEN)
             .header("Accept", "text/plain")
             .end(function (result) {
+                result.body.mangaId = data.mangaId; // include the mangaId to the returned data
                 res.status(200).send(result.body);
             });
     };
