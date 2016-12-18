@@ -54,10 +54,44 @@
             })
          }
          
-         $scope.searchKeydown = function (event) {
-            // if (event.keyCode === 13)
-               
+         showAddModal();
+         function showAddModal () {
+            $('#addModal').modal('show');
+         }
+         
+         $scope.addVolumesKeypress = function (e) {
+            var keypressed = e.which || e.keyCode;
+
+            if ((keypressed >=48 && keypressed <= 57) // digits
+               || keypressed === 44 // comma
+               || keypressed === 45 // hyphen
+               || keypressed === 8 // backspace
+               || keypressed === 13 // enter
+               || keypressed === 27 // escape
+               || (keypressed >= 35 && keypressed <= 40) // end, home, arrows
+               || keypressed === 116 // f5
+             ) {
+               return true;
+            } 
+            
+            e.preventDefault();
          };
+         
+         $scope.$watch('addVolumes', function(newValue, oldValue){
+            // 1st character should be a digit
+            if (newValue) 
+               if (newValue.length === 1) 
+                  if (!/[0-9]/.test(newValue)) 
+                     $scope.addVolumes = '';
+            
+            // prevent consecutive comma/hyphen
+            if (oldValue) 
+               $scope.addVolumes = $scope.addVolumes
+                  .replace(/,,/g, ',')
+                  .replace(/--/g, '-')
+                  .replace(/,-/g, ',')
+                  .replace(/-,/g, '-');
+         }, true);
          
          
          

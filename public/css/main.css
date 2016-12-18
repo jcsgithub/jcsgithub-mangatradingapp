@@ -66,6 +66,14 @@ body {
     font-size: 14px;
 }
 
+#addModal p {
+    font-size: 14px;
+}
+
+#addModal h4 {
+    margin-top: 0;
+}
+
 
 /****** Footer ******/
 footer {
