@@ -1,8 +1,11 @@
 'use strict';
 
+// bootstrap3-typeahead
+
+
 (function () {
    angular
-      .module('MangaTradingApp', ['ngResource'])
+      .module('MangaTradingApp', ['ngResource', 'ui.bootstrap'])
       .directive('markdown', function () {
          var converter = new Showdown.converter();
          return {
@@ -20,15 +23,14 @@
       .controller('mangaAddController', ['$http', '$q', '$resource', '$scope', '$timeout', function ($http, $q, $resource, $scope, $timeout) {
          
          /***** INITIALIZE *****/
-         $scope.loader = { isAdding: false, isSearching: false };
+         $scope.loader = { isAdding: false, isDeleting: false, isLoadingManga: false };
          
-         $scope.hasSearched = false;
-         $scope.manga = [];
-         $scope.searchTxt = '';
+         $scope.selectedManga;
          $scope.user = {};
          
          var cities = [], provinces = [];
          
+         var Manga = $resource('/api/manga/:mangaId');
          var Search = $resource('/api/search/:q');
          var User = $resource(
             '/api/user',
@@ -52,24 +54,40 @@
          }
          
          
+         
          /***** USER INTERACTIONS *****/
-         $scope.add = function (mangaId) {
-            
+         $scope.add = function () {
+            $scope.loader.isAdding = true;
          };
          
-         $scope.search = function (title) {
-            $scope.hasSearched = true;
-            $scope.loader.isSearching = true;
-            
-            $scope.manga = [];
-            
-            Search.get({ q: title }, function (res) {
-               console.log('Search.get success', res.data)
-               $scope.loader.isSearching = false;
-               
-               $scope.manga = res.data;
+         $scope.delete = function () {
+            $scope.loader.isDeleting = true;
+         };
+         
+         $scope.getManga = function (val) {
+            return Search.get({ q: val }).$promise.then(function (res) {
+               return res.data.map(function (manga){
+                  return manga;
+               });
             }, function (err) {
                console.log('Search.get error', err)
+               if (err.status == 408)
+                  alert('Oops! Something went wrong with your connection. Try again.')
+            });
+         };
+         
+         $scope.mangaSelected = function (item) {
+            $scope.loader.isLoadingManga = true;
+            
+            $scope.selectedManga = null;
+            
+            Manga.get({ mangaId: item.mangaId }).$promise.then(function (res) {
+               $scope.loader.isLoadingManga = false;
+               $scope.selectedManga = res;
+            }, function (err) {
+               console.log('Manga.get error', err)
+               if (err.status == 408)
+                  alert('Oops! Something went wrong with your connection. Try again.')
             });
          };
       }]);

@@ -70,25 +70,30 @@
 	<div class="row">
     	<div class="col-md-3 col-xs-1"></div>
     	<div class="col-md-6 col-xs-10">
-    		<form ng-submit="search(searchTxt)">
-    			<div class="input-group">
-	    			<span class="input-group-addon" id="basic-addon1"><i class="fa fa-book" aria-hidden="true"></i></span>
-					<input ng-model="searchTxt" ng-disabled="loader.isSearching" required type="text" class="form-control" placeholder="Search for a manga title.">
-					<span class="input-group-btn">
-						<button ng-disabled="loader.isSearching" class="btn btn-default" type="submit">
-							<i class="fa fa-search" aria-hidden="true"></i>
-						</button>
-					</span>
-				</div>
-    		</form>
+			<div class="input-group">
+    			<span class="input-group-addon"><i class="fa fa-book" aria-hidden="true"></i></span>
+				<input 
+					ng-model="searchTxt" 
+					uib-typeahead="manga.name for manga in getManga($viewValue)"
+					typeahead-on-select="mangaSelected($item)"
+					typeahead-loading="searchingManga" 
+					typeahead-no-results="noResults"
+					typeahead-min-length="3"
+					typeahead-wait-ms="500"
+					type="text" 
+					class="form-control" 
+					placeholder="Search for a manga title."
+				/>
+			    <span class="input-group-addon"><i ng-class="{'fa-spin': searchingManga}" class="fa fa-circle-o-notch" aria-hidden="true"></i></span>
+			</div>
     	</div>
     	<div class="col-md-3 col-xs-1"></div>
     </div>
     
-	<h4 class="manga-add-labels text-center" ng-if="loader.isSearching" ng-cloak>Searching for manga <i class="fa fa-spinner fa-spin"></i></h4>
+	<h4 class="manga-add-labels text-center" ng-if="loader.isLoadingManga" ng-cloak>Loading manga <i class="fa fa-spinner fa-spin"></i></h4>
 	<h4 class="manga-add-labels text-center" ng-if="loader.isAdding" ng-cloak>Adding manga <i class="fa fa-spinner fa-spin"></i></h4>
 	<h4 class="manga-add-labels text-center" ng-if="loader.isDeleting" ng-cloak>Deleting manga <i class="fa fa-spinner fa-spin"></i></h4>
-	<h4 class="manga-add-labels text-center text-danger" ng-if="!loader.isSearching && hasSearched && !manga.length" ng-cloak>Manga not found</h4>
+	<h4 class="manga-add-labels text-center text-danger" ng-show="noResults" ng-cloak><i class="fa fa-close"></i> No results found</h4>
 	
 	<div class="alert alert-success alert-add hidden">Manga added!</div>
 	<div class="alert alert-success alert-delete hidden">Manga deleted!</div>
@@ -97,21 +102,20 @@
 		<div class="col-md-1"></div>
 		<div class="col-md-10 col-xs-12">
 			
-			<!-- START MANGA TEMPLATE -->
-    		<div ng-hide="loader.isSearching" ng-repeat="data in manga track by $index" class="manga-search row" ng-cloak>
+			<!-- START SELECTED MANGA TEMPLATE -->
+    		<div ng-show="selectedManga" class="manga-search row" ng-cloak>
     			<div class="col-sm-3 col-xs-4">
-    				<img class="img-responsive " ng-src="{{data.cover || '/public/img/no-image-found.png'}}" alt="Manga Cover"></img>
+    				<img class="img-responsive " ng-src="{{selectedManga.cover || '/public/img/no-image-found.png'}}" alt="Manga Cover"></img>
     			</div>
     			<div class="col-sm-9 col-xs-8">
-    				<h4 class="manga-title text-info" ng-cloak>{{data.name}}</h4>
+    				<h4 class="manga-title text-info" ng-cloak>{{selectedManga.name}}</h4>
 	    			<p class="margin-small-top"><strong>Summary</strong></p>
-	    			<div src="data.info"></div>
-                    <div class="manga-info" markdown="data.info"></div>
-	    			<button ng-click="add(data.mangaId)" class="manga-add btn btn-default">ADD TO COLLECTION</button>
-	    			<button ng-click="delete(data.mangaId)" class="manga-delete btn btn-default">DELETE FROM COLLECTION</button>
+                    <div class="manga-info" markdown="selectedManga.info"></div>
+	    			<button ng-click="add(selectedManga.mangaId)" class="manga-add btn btn-default">ADD TO COLLECTION</button>
+	    			<button ng-click="delete(selectedManga.mangaId)" class="manga-delete btn btn-default">DELETE FROM COLLECTION</button>
     			</div>
     		</div>
-    		<!-- END MANGA TEMPLATE -->
+    		<!-- END SELECTED MANGA TEMPLATE -->
 			
 		</div>
 		<div class="col-md-1"></div>
@@ -128,6 +132,8 @@
 
 <!-- 3rd Party -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.3.1/ui-bootstrap.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.3.1/ui-bootstrap-tpls.js"></script>
 
 <!-- Controllers -->
 <script type="text/javascript" src="../controllers/mangaAddController.client.js"></script>

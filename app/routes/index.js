@@ -62,8 +62,11 @@ module.exports = function (app, passport) {
 		
 
 	/***** APIs *****/
+	app.route('/api/manga/:mangaId')
+		.get(isAuthorized, mangaHandler.getManga);
+		
 	app.route('/api/search/:q')
-		.get(mangaHandler.search);
+		.get(isAuthorized, mangaHandler.search);
 	
     app.route('/api/user')
         .get(isAuthorized, function (req, res) {
