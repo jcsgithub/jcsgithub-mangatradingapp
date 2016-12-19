@@ -75,6 +75,18 @@ body {
 }
 
 
+/****** Manga/Collection ******/
+.manga-collection > div {
+    padding: 0 15px 30px 15px;
+}
+
+.manga-container {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+
+
 /****** Footer ******/
 footer {
 	margin: 100px 0 15px 0;

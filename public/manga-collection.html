@@ -18,7 +18,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body ng-controller="mangaAddController">
+<body ng-controller="mangaCollectionController">
 	
 <!-- Bootstrap Modals Start -->
 <div id="addModal" class="modal fade" tabindex="-1" role="dialog">
@@ -97,8 +97,8 @@
                 <li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Manga <span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li class="active"><a href="/manga/add">Add Manga</a></li>
-						<li><a href="/manga/collection">My Collection</a></li>
+						<li><a href="/manga/add">Add Manga</a></li>
+						<li class="active"><a href="/manga/collection">My Collection</a></li>
 					</ul>
 				</li>
 				
@@ -115,60 +115,29 @@
 </nav>
 
 <div class="container">
-	<div class="manga-search row">
-    	<div class="col-md-3 col-xs-1"></div>
-    	<div class="col-md-6 col-xs-10">
-			<div class="input-group">
-    			<span class="input-group-addon"><i class="fa fa-book" aria-hidden="true"></i></span>
-				<input 
-					ng-model="searchTxt" 
-					ng-focus="searchFocus()"
-					uib-typeahead="manga.name for manga in getManga($viewValue)"
-					typeahead-on-select="mangaSelected($item)"
-					typeahead-focus-on-select="false"
-					typeahead-loading="searchingManga" 
-					typeahead-no-results="noResults"
-					typeahead-min-length="3"
-					typeahead-wait-ms="500"
-					type="text" 
-					class="form-control" 
-					placeholder="Search for a manga title."
-				/>
-			    <span class="input-group-addon"><i ng-class="{'fa-spin': searchingManga}" class="fa fa-circle-o-notch" aria-hidden="true"></i></span>
-			</div>
-    	</div>
-    	<div class="col-md-3 col-xs-1"></div>
-    </div>
-    
-	<h4 class="manga-add-labels text-center" ng-if="loader.isLoadingManga" ng-cloak>Loading manga <i class="fa fa-spinner fa-spin"></i></h4>
-	<h4 class="manga-add-labels text-center" ng-if="loader.isAdding" ng-cloak>Adding manga <i class="fa fa-spinner fa-spin"></i></h4>
+	<h4 class="manga-add-labels text-center" ng-if="loader.isLoadingCollection" ng-cloak>Loading collection <i class="fa fa-spinner fa-spin"></i></h4>
 	<h4 class="manga-add-labels text-center" ng-if="loader.isDeleting" ng-cloak>Deleting manga <i class="fa fa-spinner fa-spin"></i></h4>
+	<h4 class="manga-add-labels text-center" ng-if="loader.isUpdating" ng-cloak>Updating manga <i class="fa fa-spinner fa-spin"></i></h4>
 	<h4 class="manga-add-labels text-center text-danger" ng-show="noResults" ng-cloak><i class="fa fa-close"></i> No results found</h4>
 	
-	<div class="alert alert-success alert-add hide">Manga added!</div>
 	<div class="alert alert-success alert-delete hide">Manga deleted!</div>
+	<div class="alert alert-success alert-update hide">Manga updated!</div>
 	
-	<div class="manga row">
-		<div class="col-md-1"></div>
-		<div class="col-md-10 col-xs-12">
-			
-			<!-- START SELECTED MANGA TEMPLATE -->
-    		<div ng-if="selectedManga && !loader.isAdding && !loader.isDeleting" class="manga-template row" ng-cloak>
-    			<div class="col-sm-3 col-xs-4">
-    				<img class="img-responsive " ng-src="{{selectedManga.cover || '/public/img/no-image-found.png'}}" alt="Manga Cover"></img>
-    			</div>
-    			<div class="col-sm-9 col-xs-8">
-    				<h4 class="text-info" ng-cloak>{{selectedManga.name}}</h4>
-	    			<p class="margin-small-top"><strong>Summary</strong></p>
-                    <div class="manga-info" markdown="selectedManga.info"></div>
-	    			<button ng-if="!isMangaInCollection(selectedManga)" ng-click="showAddModal()" class="manga-add btn btn-default">ADD TO COLLECTION</button>
-	    			<button ng-if="isMangaInCollection(selectedManga)" ng-click="delete($index)" class="manga-delete btn btn-danger">DELETE FROM COLLECTION</button>
-    			</div>
-    		</div>
-    		<!-- END SELECTED MANGA TEMPLATE -->
+	<div class="manga">
+		<div class="manga-collection row">
+		
+			<!-- START MANGA TEMPLATE -->	
+			<div ng-repeat="data in user.manga track by $index" class="manga-item col-md-4 col-sm-6 col-xs-12">
+				<div class="manga-container">
+					<h4 class="text-center text-info" ng-cloak>{{collection[$index].name || 'Manga Title'}}</h4>
+					<img class="img-responsive " ng-src="{{collection[$index].cover || '/public/img/no-image-found.png'}}" alt="Manga Cover"></img>
+	    			<p class="text-center margin-small-top"><strong>Volumes Owned</strong></p>
+	    			<p class="text-center" ng-cloak>{{data.volumes.join(', ')}}</p>
+				</div>
+			</div>
+			<!-- END MANGA TEMPLATE -->
 			
 		</div>
-		<div class="col-md-1"></div>
 	</div>
 </div>
 
@@ -181,11 +150,10 @@
 <script type="text/javascript" src="https://code.angularjs.org/1.6.0-rc.2/angular-resource.js"></script>
 
 <!-- 3rd Party -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.3.1/ui-bootstrap.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.3.1/ui-bootstrap-tpls.js"></script>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="https://npmcdn.com/imagesloaded@4.1/imagesloaded.pkgd.min.js"></script>
 
 <!-- Controllers -->
-<script type="text/javascript" src="../controllers/mangaAddController.client.js"></script>
+<script type="text/javascript" src="../controllers/mangaCollectionController.client.js"></script>
 </body>
 </html>

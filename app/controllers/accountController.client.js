@@ -3,7 +3,7 @@
 (function () {
    angular
       .module('MangaTradingApp', ['ngResource'])
-      .controller('accountController', ['$http', '$q', '$resource', '$scope', '$timeout', function ($http, $q, $resource, $scope, $timeout) {
+      .controller('accountController', ['$http', '$q', '$resource', '$scope', function ($http, $q, $resource, $scope) {
          
          /***** INITIALIZE *****/
          $scope.loader = { isSaving: false };

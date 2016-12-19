@@ -1,8 +1,5 @@
 'use strict';
 
-// bootstrap3-typeahead
-
-
 (function () {
    angular
       .module('MangaTradingApp', ['ngResource', 'ui.bootstrap'])
@@ -20,15 +17,13 @@
             }
          };
       })
-      .controller('mangaAddController', ['$http', '$q', '$resource', '$scope', '$timeout', function ($http, $q, $resource, $scope, $timeout) {
+      .controller('mangaAddController', ['$resource', '$scope', function ($resource, $scope) {
          
          /***** INITIALIZE *****/
          $scope.loader = { isAdding: false, isDeleting: false, isLoadingManga: false };
          
          $scope.selectedManga;
          $scope.user = {};
-         
-         var cities = [], provinces = [];
          
          var Manga = $resource('/api/manga');
          var Search = $resource('/api/search/:q');
@@ -141,7 +136,8 @@
          };
          
          $scope.searchFocus = function () {
-            $scope.searchTxt = '' ;
+            if ($scope.selectedManga)
+               $scope.searchTxt = '' ;
          };
          
          $scope.showAddModal = function () {
@@ -266,7 +262,6 @@
             Manga.get({ mangaId: item.mangaId }).$promise.then(function (res) {
                $scope.loader.isLoadingManga = false;
                $scope.selectedManga = res;
-               console.log(res)
             }, function (err) {
                console.log('Manga.get error', err)
                if (err.status == 408)

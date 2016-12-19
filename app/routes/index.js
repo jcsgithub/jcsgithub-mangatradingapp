@@ -56,6 +56,11 @@ module.exports = function (app, passport) {
 		.get(isLoggedIn, function (req, res) {
 			res.sendFile(path + '/public/manga-add.html');
 		});
+		
+	app.route('/manga/collection')
+		.get(isLoggedIn, function (req, res) {
+			res.sendFile(path + '/public/manga-collection.html');
+		});
 
 		
 		
