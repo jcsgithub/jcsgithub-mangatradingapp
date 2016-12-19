@@ -7,7 +7,7 @@ function UserHandler () {
         var data = req.query;
         
         Users
-            .findOneAndUpdate({ '_id': req.user._id }, { $pull: { 'manga': data.mangaId }})
+            .findOneAndUpdate({ '_id': req.user._id }, { $pull: { 'manga': { 'mangaId': data.mangaId }}})
             .exec(function (err) {
                 if (err) { throw err; }
         
@@ -33,7 +33,7 @@ function UserHandler () {
         var data = req.body;
         
         Users
-            .findOneAndUpdate({ '_id': req.user._id }, { $push: { 'manga': data.mangaId }})
+            .findOneAndUpdate({ '_id': req.user._id }, { $push: { 'manga': data.newManga }})
             .exec(function (err) {
                 if (err) { throw err; }
         

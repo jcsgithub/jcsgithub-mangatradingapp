@@ -54,11 +54,6 @@
             })
          }
          
-         showAddModal();
-         function showAddModal () {
-            $('#addModal').modal('show');
-         }
-         
          $scope.addVolumesKeypress = function (e) {
             var keypressed = e.which || e.keyCode;
 
@@ -78,17 +73,93 @@
          };
          
          $scope.checkVolumes = function () {
-            console.log($scope.addVolumes)
+            var isVolumesValid = true;
+            var warningMsg = '';
+            
+            var lastChar = $scope.addVolumes.slice(-1);
+            if (/[,-]/.test(lastChar)) {
+               alert('Your input must end with a number!');
+               return;
+            }
+            
+            var volumes = [];
+            var volumesSplit = $scope.addVolumes.split(',');
+            
+            for (var i = 0; i < volumesSplit.length; i++) {
+               var currentVal = volumesSplit[i];
+               
+               if (/[-]/.test(currentVal)) {
+                  
+                  // compare left and right number of hyphened value
+                  var hyphenedVal = currentVal.split('-');
+                  var leftNum = Number(hyphenedVal[0]);
+                  var rightNum = Number(hyphenedVal[1]);
+                  
+                  // prevent a right number starting with 0
+                  if (hyphenedVal[1].charAt(0) === '0') {
+                     alert('Your volume number should start with numbers 1-9. Your wrong input is "' + currentVal + '"');
+                     return;
+                  }
+                  
+                  if (leftNum > rightNum) {
+                     alert('Left number should be less than the right number. Your wrong input is "' + currentVal + '"');
+                     return;
+                  } else {
+                     // get indidual volumes from the range
+                     for (var j = leftNum; j <= rightNum; j++) {
+                        // prevent a number greater than 200
+                        if (j > 200) {
+                           alert('The maximum number you can have is 200. Your wrong input is "' + currentVal + '"');
+                           return;
+                        }
+                        
+                        volumes.push(j);
+                     }
+                  }
+                  
+               } else {
+                  // prevent a number starting with 0
+                  if (currentVal.charAt(0) === '0') {
+                     alert('Your volume number should start with numbers 1-9. Your wrong input is "' + currentVal + '"');
+                     return;
+                  }
+                  
+                  var volumeNum = Number(currentVal);
+                  
+                  // prevent a number greater than 200
+                  if (volumeNum > 200) {
+                     alert('The maximum number you can input is 200. Your wrong input is "' + currentVal + '"');
+                     return;
+                  }
+                  
+                  volumes.push(volumeNum);
+               }
+            }
+            
+            volumes.sort(function (a, b) { return a - b; }); // sort volumes in ascending order
+            add(volumes.unique(), $scope.addVolumes); // proceed to add
+         };
+         
+         $scope.showAddModal = function () {
+            $('#addModal').modal('show');
          };
          
          $scope.$watch('addVolumes', function (newValue, oldValue) {
-            
             if (newValue) {
-               var lastCsv = $scope.addVolumes.split(',').pop();
+               // rule for the first character
+               if (newValue.length === 1) {
+                  if (!/[1-9]/.test(newValue)) {
+                     $scope.addVolumes = $scope.addVolumes.slice(0, -1);
+                  }
+               }  
                
-               if (lastCsv.length === 1) 
-                  if (!/[1-9]/.test(lastCsv)) 
-                     $scope.addVolumes = $scope.addVolumes.slice(0, -1); // 1st character in a csv should be a digit (1-9)
+               // rule for the first caracter of each csv
+               var lastCsv = $scope.addVolumes.split(',').pop();
+               if (lastCsv.length === 1) {
+                  if (!/[1-9]/.test(lastCsv)) {
+                     $scope.addVolumes = $scope.addVolumes.slice(0, -1); 
+                  }
+               }  
                      
                var volumeRange = lastCsv.split('-');
                if (volumeRange.length > 2) {
@@ -108,19 +179,28 @@
                      .replace(/-,/g, '-');
                }
             }
-            
          }, true);
          
          
          
-         /***** USER INTERACTIONS *****/
-         $scope.add = function () {
+         /***** MAIN FUNCTIONS *****/
+         function add (volumes, volumesDesc) {
+            $('#addModal').modal('hide');
+            
             $scope.loader.isAdding = true;
             
-            UserManga.update({ mangaId: $scope.selectedManga.mangaId }).$promise.then(function () {
+            var newManga = { 
+               mangaId: $scope.selectedManga.mangaId,
+               volumes: volumes,
+               volumesDesc: volumesDesc
+            };
+            
+            UserManga.update({ newManga: newManga }).$promise.then(function () {
                $scope.loader.isAdding = false;
                
-               $scope.user.manga.push($scope.selectedManga.mangaId);
+               $scope.addVolumes = '';
+               
+               $scope.user.manga.push(newManga);
                
                $(".alert-add").removeClass('hide');
                $(".alert-add").alert();
@@ -132,15 +212,14 @@
                if (err.status == 408)
                   alert('Oops! Something went wrong with your connection. Try again.')
             });
-         };
+         }
          
-         $scope.delete = function () {
+         $scope.delete = function (index) {
             $scope.loader.isDeleting = true;
             
             UserManga.delete({ mangaId: $scope.selectedManga.mangaId }).$promise.then(function () {
                $scope.loader.isDeleting = false;
                
-               var index = $scope.user.manga.indexOf($scope.selectedManga.mangaId);
                $scope.user.manga.splice(index, 1);
                
                $(".alert-delete").removeClass('hide');
@@ -167,6 +246,14 @@
             });
          };
          
+         $scope.isMangaInCollection = function (selectedManga) {
+            if (selectedManga.mangaId) {
+               return $scope.user.manga.some(function (item) {
+                  return item.mangaId === selectedManga.mangaId
+               });   
+            }
+         };
+         
          $scope.mangaSelected = function (item) {
             $scope.loader.isLoadingManga = true;
             
@@ -184,3 +271,14 @@
          };
       }]);
 })();
+
+Array.prototype.unique = function() {
+	var n = {}, r = [];
+	for (var i = 0; i < this.length; i++) {
+		if (!n[this[i]]) {
+			n[this[i]] = true; 
+			r.push(this[i]); 
+		}
+	}
+	return r;
+}

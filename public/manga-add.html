@@ -28,7 +28,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title">Add Manga</h4>
 			</div>
-			<form>
+			<form ng-submit="checkVolumes()">
 				<div class="modal-body">
 			    
 				    <div class="row">
@@ -39,6 +39,7 @@
 				    		<p>When using hyphen (-), you need 2 numbers. The number on the left should be <span class="text-info">less than</span> the number on the right to describe the volume range correctly.</p>
 				    		<p>Only positive numbers are accepted.</p>
 				    		<p>Currently, the maximum volume number is #<span class="text-info">200</span>.</p>
+				    		<p>Don't worry if you ever input duplicate volumes, we will take care of that for you!</p>
 				    		<p>Examples:</p>
 				    		<ul>
 				    			<li><p>This is <span class="text-success">VALID</span>. 1,3,5-10,20,82,189</p></li>
@@ -60,7 +61,7 @@
 				    
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-default" data-dismiss="modal">Add to Collection</button>
+					<button type="submit" class="btn btn-default">Add to Collection</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			</form>
@@ -158,8 +159,8 @@
     				<h4 class="manga-title text-info" ng-cloak>{{selectedManga.name}}</h4>
 	    			<p class="margin-small-top"><strong>Summary</strong></p>
                     <div class="manga-info" markdown="selectedManga.info"></div>
-	    			<button ng-show="user.manga.indexOf(selectedManga.mangaId) == -1" ng-click="add()" class="manga-add btn btn-default">ADD TO COLLECTION</button>
-	    			<button ng-show="user.manga.indexOf(selectedManga.mangaId) != -1" ng-click="delete()" class="manga-delete btn btn-danger">DELETE FROM COLLECTION</button>
+	    			<button ng-if="!isMangaInCollection(selectedManga)" ng-click="showAddModal()" class="manga-add btn btn-default">ADD TO COLLECTION</button>
+	    			<button ng-if="isMangaInCollection(selectedManga)" ng-click="delete($index)" class="manga-delete btn btn-danger">DELETE FROM COLLECTION</button>
     			</div>
     		</div>
     		<!-- END SELECTED MANGA TEMPLATE -->
