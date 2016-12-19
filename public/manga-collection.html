@@ -120,16 +120,15 @@
 	<h4 class="manga-add-labels text-center" ng-if="loader.isUpdating" ng-cloak>Updating manga <i class="fa fa-spinner fa-spin"></i></h4>
 	<h4 class="manga-add-labels text-center text-danger" ng-show="noResults" ng-cloak><i class="fa fa-close"></i> No results found</h4>
 	
-	<div class="alert alert-success alert-delete hide">Manga deleted!</div>
-	<div class="alert alert-success alert-update hide">Manga updated!</div>
-	
 	<div class="manga">
 		<div class="manga-collection row">
 		
 			<!-- START MANGA TEMPLATE -->	
-			<div ng-repeat="data in user.manga track by $index" class="manga-item col-md-4 col-sm-6 col-xs-12">
+			<div ng-if="!loader.isDeleting" ng-repeat="data in user.manga track by $index" class="manga-item col-md-4 col-sm-6 col-xs-12">
 				<div class="manga-container">
-					<h4 class="text-center text-info" ng-cloak>{{collection[$index].name || 'Manga Title'}}</h4>
+					<button ng-click="edit($index)" class="manga-collection-edit btn btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+					<button ng-click="delete($index)" class="manga-collection-delete btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i></button>
+					<h4 class="text-center text-info margin-medium-top" ng-cloak>{{collection[$index].name || data.mangaId || 'Manga Title'}}</h4>
 					<img class="img-responsive " ng-src="{{collection[$index].cover || '/public/img/no-image-found.png'}}" alt="Manga Cover"></img>
 	    			<p class="text-center margin-small-top"><strong>Volumes Owned</strong></p>
 	    			<p class="text-center" ng-cloak>{{data.volumes.join(', ')}}</p>

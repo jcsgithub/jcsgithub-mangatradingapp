@@ -71,6 +71,19 @@
          
          
          /***** MAIN FUNCTIONS *****/
+         $scope.delete = function (index) {
+            $scope.loader.isDeleting = true;
+            
+            UserManga.delete({ mangaId: $scope.user.manga[index].mangaId }).$promise.then(function () {
+               alert('Manga deleted!');
+               location.reload();
+            }, function (err) {
+               console.log('UserManga.delete error', err)
+               if (err.status == 408)
+                  alert('Oops! Something went wrong with your connection. Try again.')
+            });
+         };
+         
          $scope.isMangaInCollection = function (selectedManga) {
             if (selectedManga.mangaId) {
                return $scope.user.manga.some(function (item) {
