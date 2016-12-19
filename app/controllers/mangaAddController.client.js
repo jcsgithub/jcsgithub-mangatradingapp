@@ -140,6 +140,10 @@
             add(volumes.unique(), $scope.addVolumes); // proceed to add
          };
          
+         $scope.searchFocus = function () {
+            $scope.searchTxt = '' ;
+         };
+         
          $scope.showAddModal = function () {
             $('#addModal').modal('show');
          };

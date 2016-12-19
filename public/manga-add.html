@@ -122,8 +122,10 @@
     			<span class="input-group-addon"><i class="fa fa-book" aria-hidden="true"></i></span>
 				<input 
 					ng-model="searchTxt" 
+					ng-focus="searchFocus()"
 					uib-typeahead="manga.name for manga in getManga($viewValue)"
 					typeahead-on-select="mangaSelected($item)"
+					typeahead-focus-on-select="false"
 					typeahead-loading="searchingManga" 
 					typeahead-no-results="noResults"
 					typeahead-min-length="3"
