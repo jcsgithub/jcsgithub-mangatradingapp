@@ -32,7 +32,7 @@
                
                $("#authorized-navbar").removeClass("hide");
                
-               if (res && $scope.user.manga) {
+               if ($scope.user.manga.length) {
                   $scope.user.manga = $scope.user.manga.sort(function (a, b) {
                      return a.mangaId > b.mangaId;
                   });
@@ -58,7 +58,8 @@
                      initializeMasonry();
                   });
                } else {
-                  $scope.noResultsFound = true;
+                  $scope.loader.isLoadingCollection = false;
+                  $scope.noResults = true;
                }
                
             }, function (err) {

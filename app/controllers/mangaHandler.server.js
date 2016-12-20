@@ -50,7 +50,7 @@ function MangaHandler () {
             .end(function (result) {
                 var finalData = [];
                 
-                if (result.body.length) {
+                if (result.body && result.body.length) {
                     result.body.forEach(function (item) {
                         finalData.push({
                             mangaId: item.mangaId,

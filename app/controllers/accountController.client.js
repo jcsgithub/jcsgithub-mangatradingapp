@@ -109,7 +109,7 @@
 
          
          
-         /***** USER INTERACTIONS *****/
+         /***** MAIN FUNCTIONS *****/
          $scope.save = function () {
             $scope.loader.isSaving = true;
             User.update($scope.user, function () {

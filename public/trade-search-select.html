@@ -18,7 +18,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body ng-controller="tradeSearchController">
+<body ng-controller="tradeSearchSelectController">
 	
 <!-- Navbar -->
 <nav class="navbar navbar-default navbar-static-top">
@@ -39,7 +39,7 @@
                 <li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Trade <span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li class="active"><a href="/trade/search">Find a Manga</a></li>
+						<li><a href="/trade/search">Find a Manga</a></li>
 						<li><a href="/trade/requests">Pending Trades</a></li>
 						<li><a href="/trade/history">Trade History</a></li>
 					</ul>
@@ -66,21 +66,35 @@
 
 <div class="container">
 	<h4 class="manga-labels text-center" ng-if="loader.isLoadingData" ng-cloak>Loading available manga <i class="fa fa-spinner fa-spin"></i></h4>
-	<h4 class="manga-labels text-center text-danger" ng-show="noResults" ng-cloak><i class="fa fa-close"></i> No manga found</h4>
-	<h4 class="manga-labels text-center text-info" ng-if="!loader.isLoadingData && !noResults" ng-cloak>{{manga.length}} manga <span ng-if="manga.length === 1">is</span><span ng-if="manga.length > 1">are</span> avalable for trade.</h4>
+	<h4 class="manga-labels text-center text-danger" ng-show="noResults" ng-cloak><i class="fa fa-close"></i> Manga not found or no owner found.</h4>
+	<h4 class="manga-labels text-center text-info" ng-if="!loader.isLoadingData && !noResults" ng-cloak>{{owners.length}} owner<span ng-if="owners.length > 1">s</span> found.</h4>
 	
 	<div class="manga">
 		<div class="manga-collection row">
 		
-			<!-- START MANGA TEMPLATE -->	
-			<div ng-repeat="data in manga track by $index" class="manga-item col-md-4 col-sm-6 col-xs-12" ng-cloak>
+			<!-- START MANGA TEMPLATE -->
+			<div ng-if="!loader.isLoadingData" class="manga-template row" ng-cloak>
+    			<div class="col-sm-3 col-xs-4">
+    				<img class="img-responsive " ng-src="{{manga.cover || '/public/img/no-image-found.png'}}" alt="Manga Cover"></img>
+    			</div>
+    			<div class="col-sm-9 col-xs-8">
+    				<h4 class="text-info" ng-cloak>{{manga.name}}</h4>
+	    			<p class="margin-small-top"><strong>Summary</strong></p>
+                    <div class="manga-info" markdown="manga.info"></div>
+    			</div>
+    		</div>
+			<!-- END MANGA TEMPLATE -->
+			
+			<!-- START OWNERS TEMPLATE -->	
+			<div ng-if="!loader.isLoadingData" ng-repeat="data in owners track by $index" class="manga-item col-md-4 col-sm-6 col-xs-12" ng-cloak>
 				<div class="manga-container">
-					<h4 class="text-center text-info" ng-cloak>{{data.name || data || 'Manga Title'}}</h4>
-					<img class="img-responsive " ng-src="{{data.cover || '/public/img/no-image-found.png'}}" alt="Manga Cover"></img>
-					<a ng-href="/trade/manga/{{data.mangaId}}" class="btn btn-default margin-small-top center-block">View Owners</a>
+					<h4 class="text-center text-info" ng-cloak>{{data.facebook.displayName || 'Owner Name'}}</h4>
+					<h5 class="text-center titlecase">{{getLocationLabel(data.location.city, data.location.province)}}</h5>
+					<p class="text-center" ng-cloak>Volumes owned: {{volumesDescSpacing(data.manga[0].volumesDesc)}}</p>
+					<button class="btn btn-default margin-small-top center-block">Request a Trade</button>
 				</div>
 			</div>
-			<!-- END MANGA TEMPLATE -->
+			<!-- END OWNERS TEMPLATE -->
 			
 		</div>
 	</div>
@@ -95,10 +109,11 @@
 <script type="text/javascript" src="https://code.angularjs.org/1.6.0-rc.2/angular-resource.js"></script>
 
 <!-- 3rd Party -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
 <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 <script src="https://npmcdn.com/imagesloaded@4.1/imagesloaded.pkgd.min.js"></script>
 
 <!-- Controllers -->
-<script type="text/javascript" src="../controllers/tradeSearchController.client.js"></script>
+<script type="text/javascript" src="../../controllers/tradeSearchSelectController.client.js"></script>
 </body>
 </html>

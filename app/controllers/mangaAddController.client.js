@@ -181,6 +181,7 @@
             $('#addModal').modal('hide');
             
             $scope.loader.isAdding = true;
+            $scope.noResults = false;
             
             var newManga = { 
                mangaId: $scope.selectedManga.mangaId,

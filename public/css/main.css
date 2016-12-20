@@ -131,6 +131,10 @@ footer {
     font-size: 16px !important;
 }
 
+.titlecase {
+    text-transform: capitalize;
+}
+
 [ng-cloak] {
     display: none !important;
 }

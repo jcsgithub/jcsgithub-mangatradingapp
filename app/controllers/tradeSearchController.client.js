@@ -32,7 +32,7 @@
          
          function getUniqueManga () {
             MangaUnique.get(function (res) {
-               if (res && res.manga) {
+               if (res.manga.length) {
                   var promises = [];
                   
                   // populate collection asynchronously
@@ -55,7 +55,8 @@
                      initializeMasonry();
                   });
                } else {
-                  $scope.noResultsFound = true;
+                  $scope.loader.isLoadingData = false;
+                  $scope.noResults = true;
                }
             }, function (err) {
                console.log('MangaUnique.get err', err)

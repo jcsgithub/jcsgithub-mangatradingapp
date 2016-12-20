@@ -119,7 +119,7 @@
 	<h4 class="manga-labels text-center" ng-if="loader.isDeleting" ng-cloak>Deleting manga <i class="fa fa-spinner fa-spin"></i></h4>
 	<h4 class="manga-labels text-center" ng-if="loader.isUpdating" ng-cloak>Updating manga <i class="fa fa-spinner fa-spin"></i></h4>
 	<h4 class="manga-labels text-center text-danger" ng-show="noResults" ng-cloak><i class="fa fa-close"></i> No manga found</h4>
-	<h4 class="manga-labels text-center text-info" ng-if="!loader.isDeleting && !loader.isLoadingCollection && !loader.isUpdating" ng-cloak>You have {{user.manga.length}} manga in your collection.</h4>
+	<h4 class="manga-labels text-center text-info" ng-if="!loader.isDeleting && !loader.isLoadingCollection && !loader.isUpdating && !noResults" ng-cloak>You have {{user.manga.length}} manga in your collection.</h4>
 	
 	<div class="manga">
 		<div class="manga-collection row">
