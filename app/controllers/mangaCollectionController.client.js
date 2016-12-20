@@ -8,12 +8,10 @@
          /***** INITIALIZE *****/
          $scope.loader = { isDeleting: false, isLoadingCollection: true, isUpdating: false };
          
-         $scope.collection = [];
+         $scope.editIndex;
          $scope.searchTxt = '';
          $scope.selectedEditManga;
          $scope.user = {};
-         
-         var editIndex;
          
          var Manga = $resource('/api/manga');
          var User = $resource('/api/user');
@@ -41,7 +39,7 @@
                   res.manga.forEach(function (item, index) {
                      (function (index) {
                         promises.push(Manga.get({ mangaId: item.mangaId }).$promise.then(function (res) {
-                           $scope.collection[index] = res;
+                           $scope.user.manga[index].mangaDetails = res;
                         }, function (err) {
                            console.log('getMangaData error', err)
                            if (err.status == 408)
@@ -154,7 +152,8 @@
          };
          
          $scope.showEditModal = function (index) {
-            editIndex = index;
+            console.log($scope.user.manga)
+            $scope.editIndex = index;
             
             $scope.selectedEditManga = {
                mangaId: $scope.user.manga[index].mangaId,
@@ -210,8 +209,6 @@
          
          /***** MAIN FUNCTIONS *****/
          function edit (volumes, volumesDesc) {
-            console.log('edit', $scope.selectedEditManga.mangaId, volumes, volumesDesc)
-            
             $('#editModal').modal('hide');
             
             $scope.loader.isUpdating = true;
