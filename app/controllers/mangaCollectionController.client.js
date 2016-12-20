@@ -32,11 +32,15 @@
                
                $("#authorized-navbar").removeClass("hide");
                
-               if (res && res.manga) {
+               if (res && $scope.user.manga) {
+                  $scope.user.manga = $scope.user.manga.sort(function (a, b) {
+                     return a.mangaId > b.mangaId;
+                  });
+                  
                   var promises = [];
                   
                   // populate collection asynchronously
-                  res.manga.forEach(function (item, index) {
+                  $scope.user.manga.forEach(function (item, index) {
                      (function (index) {
                         promises.push(Manga.get({ mangaId: item.mangaId }).$promise.then(function (res) {
                            $scope.user.manga[index].mangaDetails = res;
