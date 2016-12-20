@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="MangaTradingApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Manga Trading App by jcsgithub</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/public/css/main.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body ng-controller="tradeSearchController">
+	
+<!-- Navbar -->
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Manga Trading App</a>
+        </div>
+		
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul id="authorized-navbar" class="nav navbar-nav navbar-right hide">
+                <li><a href="/">Home</a></li>
+                <li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Trade <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li class="active"><a href="/trade/search">Find a Manga</a></li>
+						<li><a href="/trade/requests">Pending Trades</a></li>
+						<li><a href="/trade/history">Trade History</a></li>
+					</ul>
+				</li>
+                <li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Manga <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="/manga/add">Add Manga</a></li>
+						<li><a href="/manga/collection">My Collection</a></li>
+					</ul>
+				</li>
+				
+				<!-- ACCOUNT/LOGOUT SM -->
+                <li class="hidden-xs"><a href="/account" data-toggle="tooltip" data-placement="bottom" title="Settings"><i class="fa fa-cog" aria-hidden="true"></i></a></li>
+                <li class="hidden-xs"><a href="/logout" data-toggle="tooltip" data-placement="bottom" title="Sign out"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                
+                <!-- ACCOUNT/LOGOUT XS -->
+                <li class="visible-xs"><a href="/account">Account</a></li>
+                <li class="visible-xs"><a href="/logout">Sign Out</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+	<h4 class="manga-labels text-center" ng-if="loader.isLoadingData" ng-cloak>Loading available manga <i class="fa fa-spinner fa-spin"></i></h4>
+	<h4 class="manga-labels text-center text-danger" ng-show="noResults" ng-cloak><i class="fa fa-close"></i> No manga found</h4>
+	<h4 class="manga-labels text-center text-info" ng-if="!loader.isLoadingData" ng-cloak>{{manga.length}} manga <span ng-if="manga.length === 1">is</span><span ng-if="manga.length > 1">are</span> avalable for trade.</h4>
+	
+	<div class="manga">
+		<div class="manga-collection row">
+		
+			<!-- START MANGA TEMPLATE -->	
+			<div ng-repeat="data in manga track by $index" class="manga-item col-md-4 col-sm-6 col-xs-12" ng-cloak>
+				<div class="manga-container">
+					<h4 class="text-center text-info" ng-cloak>{{data.name || data || 'Manga Title'}}</h4>
+					<img class="img-responsive " ng-src="{{data.cover || '/public/img/no-image-found.png'}}" alt="Manga Cover"></img>
+					<a ng-href="/trade/manga/{{data.mangaId}}" class="btn btn-default margin-small-top center-block">View Owners</a>
+				</div>
+			</div>
+			<!-- END MANGA TEMPLATE -->
+			
+		</div>
+	</div>
+</div>
+
+<!-- Bootstrap & JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<!-- Angular -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0-rc.2/angular.js"></script>
+<script type="text/javascript" src="https://code.angularjs.org/1.6.0-rc.2/angular-resource.js"></script>
+
+<!-- 3rd Party -->
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="https://npmcdn.com/imagesloaded@4.1/imagesloaded.pkgd.min.js"></script>
+
+<!-- Controllers -->
+<script type="text/javascript" src="../controllers/tradeSearchController.client.js"></script>
+</body>
+</html>

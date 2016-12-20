@@ -30,7 +30,7 @@
          var User = $resource('/api/user');
          var UserManga = $resource('/api/user/manga');
             
-         getUser ();
+         getUser();
          
          
          

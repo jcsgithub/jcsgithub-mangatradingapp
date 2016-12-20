@@ -18,7 +18,7 @@
             { update: { method: 'PUT' } }
          );
          
-         getInitialData ();
+         getInitialData();
          
          
          

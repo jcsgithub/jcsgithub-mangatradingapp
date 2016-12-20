@@ -34,6 +34,15 @@
                $("#unauthorized-navbar").removeClass("hide");
             });
          }
+         
+         function getMangaOwners () {
+            var MangaOwners = $resource('/api/manga/owners/:mangaId');
+            MangaOwners.get({ mangaId: 'one-piece' }, function (res) {
+               console.log('MangaOwners.get', res.owners)
+            }, function (err) {
+               console.log('MangaOwners.get err', err)
+            });  
+         }
 
          
          

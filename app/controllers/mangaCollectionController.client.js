@@ -21,7 +21,7 @@
             { update: { method: 'PUT' } }
          );
             
-         getUser ();
+         getUser();
          
          
          
@@ -152,7 +152,6 @@
          };
          
          $scope.showEditModal = function (index) {
-            console.log($scope.user.manga)
             $scope.editIndex = index;
             
             $scope.selectedEditManga = {

@@ -2,6 +2,8 @@
 
 var unirest = require('unirest');
 
+var Users = require('../models/users.js');
+
 function MangaHandler () {
     this.getManga = function (req, res) {
         var data = req.query;
@@ -12,6 +14,29 @@ function MangaHandler () {
             .end(function (result) {
                 result.body.mangaId = data.mangaId; // include the mangaId to the returned data
                 res.status(200).send(result.body);
+            });
+    };
+    
+    this.getMangaOwners = function (req, res) {
+        var data = req.params;
+        
+        Users
+            .find({ 'manga.mangaId': data.mangaId }, { 'manga': { $elemMatch: { 'mangaId': data.mangaId }}})
+            .select('-__v -facebook.id')
+            .exec(function (err, result) {
+                if (err) { throw err; }
+                
+                res.status(200).send({ owners: result });
+            });
+    };
+    
+    this.getUniqueManga = function (req, res) {
+        Users
+            .distinct('manga.mangaId')
+            .exec(function (err, result) {
+                if (err) { throw err; }
+                
+                res.status(200).send({ manga: result });
             });
     };
     
