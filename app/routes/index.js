@@ -87,6 +87,7 @@ module.exports = function (app, passport) {
     
 	app.route('/api/user/manga')
 		.delete(isAuthorized, userHandler.deleteManga)
+		.post(isAuthorized, userHandler.addManga)
 		.put(isAuthorized, userHandler.updateManga);
     
     

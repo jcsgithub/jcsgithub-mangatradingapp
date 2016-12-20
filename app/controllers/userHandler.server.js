@@ -3,6 +3,19 @@
 var Users = require('../models/users.js');
 
 function UserHandler () {
+    this.addManga = function (req, res) {
+        var data = req.body;
+        
+        Users
+            .findOneAndUpdate({ '_id': req.user._id }, { $push: { 'manga': data.newManga }})
+            .exec(function (err) {
+                if (err) { throw err; }
+        
+                res.sendStatus(200);
+            }
+        );
+    };
+    
     this.deleteManga = function (req, res) {
         var data = req.query;
         
@@ -32,11 +45,13 @@ function UserHandler () {
     this.updateManga = function (req, res) {
         var data = req.body;
         
-        Users
-            .findOneAndUpdate({ '_id': req.user._id }, { $push: { 'manga': data.newManga }})
-            .exec(function (err) {
+        Users.update({ 'manga.mangaId': data.mangaId }, 
+            { $set: { 
+                'manga.$.volumes': data.volumes, 
+                'manga.$.volumesDesc': data.volumesDesc 
+            }}, function (err, response) { 
                 if (err) { throw err; }
-        
+                
                 res.sendStatus(200);
             }
         );

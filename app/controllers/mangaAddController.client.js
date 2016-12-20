@@ -28,11 +28,7 @@
          var Manga = $resource('/api/manga');
          var Search = $resource('/api/search/:q');
          var User = $resource('/api/user');
-         var UserManga = $resource(
-            '/api/user/manga',
-            {},
-            { update: { method: 'PUT' } }
-         );
+         var UserManga = $resource('/api/user/manga');
             
          getUser ();
          
@@ -68,9 +64,6 @@
          };
          
          $scope.checkVolumes = function () {
-            var isVolumesValid = true;
-            var warningMsg = '';
-            
             var lastChar = $scope.addVolumes.slice(-1);
             if (/[,-]/.test(lastChar)) {
                alert('Your input must end with a number!');
@@ -195,7 +188,7 @@
                volumesDesc: volumesDesc
             };
             
-            UserManga.update({ newManga: newManga }).$promise.then(function () {
+            UserManga.save({ newManga: newManga }).$promise.then(function () {
                $scope.loader.isAdding = false;
                
                $scope.addVolumes = '';
@@ -208,7 +201,7 @@
                   $(".alert-add").slideUp(500);
                });
             }, function (err) {
-               console.log('UserManga.update error', err)
+               console.log('UserManga.save error', err)
                if (err.status == 408)
                   alert('Oops! Something went wrong with your connection. Try again.')
             });
