@@ -4,11 +4,13 @@ var path = process.cwd();
 
 module.exports = function (app, passport) {
 	// Paths to import
-	var MangaHandler = require(path + '/app/controllers/mangaHandler.server.js');
-	var UserHandler = require(path + '/app/controllers/userHandler.server.js');
+	var MangaHandler = require(path + '/app/handlers/mangaHandler.server.js');
+	var TradeHandler = require(path + '/app/handlers/tradeHandler.server.js');
+	var UserHandler = require(path + '/app/handlers/userHandler.server.js');
 	
 	// Objects imported
 	var mangaHandler = new MangaHandler();
+	var tradeHandler = new TradeHandler();
 	var userHandler = new UserHandler();
 	
 	
@@ -108,6 +110,12 @@ module.exports = function (app, passport) {
 		
 	app.route('/api/search/:q')
 		.get(isAuthorized, mangaHandler.search);
+		
+	app.route('/api/trade/new')
+		.post(isAuthorized, tradeHandler.addTrade);
+		
+	app.route('/api/trade/user')
+		.get(isAuthorized, tradeHandler.getTrades);
 	
     app.route('/api/user')
         .get(isAuthorized, function (req, res) {

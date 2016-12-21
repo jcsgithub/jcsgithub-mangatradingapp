@@ -75,6 +75,7 @@ body {
 }
 
 
+
 /****** Manga/Collection ******/
 .manga-collection > div {
     padding: 0 15px 30px 15px;
@@ -99,6 +100,13 @@ body {
     position: absolute;
     right: 48px;
     top: 0;
+}
+
+
+
+/****** Trade/Select ******/
+.volume-checkbox {
+    margin-right: 15px;
 }
 
 

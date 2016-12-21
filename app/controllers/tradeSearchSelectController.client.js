@@ -17,26 +17,30 @@
             }
          };
       })
-      .controller('tradeSearchSelectController', ['$http', '$q', '$resource', '$scope', function ($http, $q, $resource, $scope) {
+      .controller('tradeSearchSelectController', ['$http', '$q', '$resource', '$scope', '$timeout', function ($http, $q, $resource, $scope, $timeout) {
          
          /***** INITIALIZE *****/
-         $scope.loader = { isLoadingData: true };
+         $scope.loader = { isLoadingData: true, isSubmitting: false };
          
          $scope.manga = [], $scope.owners = [];
+         $scope.selectedOwner, $scope.selectedVolumes = [];
          $scope.user = {};
          
          var cities, provinces;
          var mangaId = window.location.pathname.split('/').slice(3).join('/'); // get mangaId from current URL
-         var promises = [];
+         var promises = [], trades;
          
          var Manga = $resource('/api/manga');
          var MangaOwners = $resource('/api/manga/owners/:mangaId');
+         var NewTrade = $resource('/api/trade/new');
+         var Trades = $resource('/api/trade/user');
          var User = $resource('/api/user');
             
          getLocation();
-         getUser();
          getMangaDetails();
          getMangaOwners();
+         getTrades();
+         getUser();
          
          $q.all(promises).then(function () {
             $scope.loader.isLoadingData = false;
@@ -66,6 +70,14 @@
                }, function (err) {
                   console.log('cities err', err)
                }));   
+         }
+         
+         function getTrades () {
+            promises.push(Trades.get({ mangaId: mangaId }).$promise.then(function (res) {
+               trades = res.trades;
+            }, function (err) {
+               console.log('Trades.get error', err)
+            }));
          }
          
          function getUser () {
@@ -109,14 +121,68 @@
          }
          
          $scope.getLocationLabel = function (citymunCode, provCode) {
-            var cityIndex = cities.map(function (x) { return x.citymunCode; }).indexOf(citymunCode);
-            var provinceIndex = provinces.map(function (x) { return x.provCode; }).indexOf(provCode);
-            
-            return cities[cityIndex].citymunDesc.toLowerCase() + ', ' + provinces[provinceIndex].provDesc.toLowerCase();   
+            if (citymunCode && provCode) {
+               var cityIndex = cities.map(function (x) { return x.citymunCode; }).indexOf(citymunCode);
+               var provinceIndex = provinces.map(function (x) { return x.provCode; }).indexOf(provCode);
+               
+               return cities[cityIndex].citymunDesc.toLowerCase() + ', ' + provinces[provinceIndex].provDesc.toLowerCase();      
+            }
+         };
+         
+         $scope.hasTrade = function (ownerId) {
+            if (trades && trades.length)
+               for (var i = 0; i < trades.length; i++) {
+                  if (trades[i].to === ownerId)
+                     return true;
+               }
+         };
+         
+         $scope.showRequestModal = function (owner) {
+            $scope.selectedOwner = owner;
+            $scope.selectedVolumes = [];
+            $('#requestModal').modal('show'); 
          };
          
          $scope.volumesDescSpacing = function (data) {
             return data.replace(/,/g, ', ') ;
+         };
+         
+         
+         
+         /***** CONTROLLER FUNCTIONS *****/
+         $scope.submitRequest = function () {
+            if ($scope.selectedVolumes.length) {
+               $scope.loader.isSubmitting = true;
+               $('#requestModal').modal('hide'); 
+               
+               var newTrade = {
+                  mangaId: mangaId,
+                  to: $scope.selectedOwner._id,
+                  volumesRequested: $scope.selectedVolumes
+               };
+               
+               NewTrade.save(newTrade, function (res) {
+                  alert('Request submitted!');
+                  location.reload();
+               }, function (err) {
+                  console.log('NewTrade.save err', err)
+               });
+            } else {
+               $(".alert-warning").removeClass('hide');
+               $(".alert-warning").alert();
+               $(".alert-warning").fadeTo(2000, 500).slideUp(500, function(){
+                  $(".alert-warning").slideUp(500);
+               }); 
+            }
+         };
+         
+         $scope.toggleVolume = function (volume) {
+            var index = $scope.selectedVolumes.indexOf(volume);
+            
+            if (index > -1) 
+               $scope.selectedVolumes.splice(index, 1);
+            else 
+               $scope.selectedVolumes.push(volume);
          };
       }]);
 })();
