@@ -24,7 +24,7 @@
          
          /***** CONTROLLER FUNCTIONS *****/
          function getInitialData () {
-            var src = 'https://raw.githubusercontent.com/clavearnel/philippines-region-province-citymun-brgy/master/json'
+            var src = 'https://jcsgithub-mangatradingapp-jcsgithub.c9users.io/json'
             
             $q.all([
                
@@ -38,7 +38,7 @@
                }),
                
                // get regions
-               $http.get(src + '/refregion.json')
+               $http.get(src + '/regions')
                   .then(function (res) {
                      $scope.locations.region = res.data.RECORDS;
                   }, function (err) {
@@ -46,7 +46,7 @@
                   }),
                   
                // get provinces
-               $http.get(src + '/refprovince.json')
+               $http.get(src + '/provinces')
                   .then(function (res) {
                      provinces = res.data.RECORDS;
                   }, function (err) {
@@ -54,7 +54,7 @@
                   }),
                   
                // get cities
-               $http.get(src + '/refcitymun.json')
+               $http.get(src + '/cities')
                   .then(function (res) {
                      cities = res.data.RECORDS;
                   }, function (err) {

@@ -22,8 +22,7 @@
          /***** INITIALIZE *****/
          $scope.loader = { isLoadingData: true };
          
-         $scope.manga;
-         $scope.owners = [];
+         $scope.manga = [], $scope.owners = [];
          $scope.user = {};
          
          var cities, provinces;
@@ -41,6 +40,7 @@
          
          $q.all(promises).then(function () {
             $scope.loader.isLoadingData = false;
+            initializeMasonry();
          }, function (err) {
             console.log('$q.all err', err)
          });
@@ -49,10 +49,10 @@
          
          /***** CONTROLLER FUNCTIONS *****/
          function getLocation () {
-            var src = 'https://raw.githubusercontent.com/clavearnel/philippines-region-province-citymun-brgy/master/json';
+            var src = 'https://jcsgithub-mangatradingapp-jcsgithub.c9users.io/json';
             
             // get provinces
-            promises.push($http.get(src + '/refprovince.json')
+            promises.push($http.get(src + '/provinces')
                .then(function (res) {
                   provinces = res.data.RECORDS;
                }, function (err) {
@@ -60,7 +60,7 @@
                }));
                
             // get cities
-            promises.push($http.get(src + '/refcitymun.json')
+            promises.push($http.get(src + '/cities')
                .then(function (res) {
                   cities = res.data.RECORDS;
                }, function (err) {
@@ -80,7 +80,10 @@
          
          function getMangaDetails () {
             promises.push(Manga.get({ mangaId: mangaId }).$promise.then(function (res) {
-               $scope.manga = res;
+               if (!res.error)
+                  $scope.manga = res;
+               else
+                  $scope.noResultsManga = true;
             }, function (err) {
                console.log('Manga.get error', err)
                if (err.status == 408)
@@ -89,14 +92,20 @@
          }
          
          function getMangaOwners () {
-            MangaOwners.get({ mangaId: mangaId }, function (res) {
-               if (res.owners.length)
+            promises.push(MangaOwners.get({ mangaId: mangaId }, function (res) {
+               if (res.owners && res.owners.length)
                   $scope.owners = res.owners;
                else
-                  $scope.noResults = true;
+                  $scope.noResultsOwners = true;
             }, function (err) {
                console.log('MangaOwners.get err', err)
-            });    
+            }));    
+         }
+         
+         function initializeMasonry () {
+            var mangaCollection = $('.manga-collection').imagesLoaded( function() {
+               mangaCollection.masonry({ itemSelector: '.manga-item' });
+            });
          }
          
          $scope.getLocationLabel = function (citymunCode, provCode) {

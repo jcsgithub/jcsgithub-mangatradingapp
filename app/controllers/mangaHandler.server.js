@@ -21,7 +21,7 @@ function MangaHandler () {
         var data = req.params;
         
         Users
-            .find({ 'manga.mangaId': data.mangaId }, { 'manga': { $elemMatch: { 'mangaId': data.mangaId }}})
+            .find({ '_id': { $ne: req.user._id }, 'manga.mangaId': data.mangaId }, { 'manga': { $elemMatch: { 'mangaId': data.mangaId }}})
             .select('-__v -facebook.id')
             .exec(function (err, result) {
                 if (err) { throw err; }

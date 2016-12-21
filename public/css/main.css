@@ -111,6 +111,10 @@ footer {
 
 
 /****** Others ******/
+.border-red {
+    border: 1px solid #f3a1a1;    
+}
+
 .hidden {
     display: none !important;
 }
@@ -121,6 +125,14 @@ footer {
 
 .margin-medium-top {
     margin-top: 30px;
+}
+
+.margin-small-bottom {
+    margin-bottom: 10px;
+}
+
+.margin-medium-bottom {
+    margin-bottom: 30px;
 }
 
 .show {

@@ -71,10 +71,30 @@ module.exports = function (app, passport) {
 		.get(isLoggedIn, function (req, res) {
 			res.sendFile(path + '/public/trade-search-select.html');
 		});
+		
+		
+		
+		
+		
+	/***** JSONs *****/
+	app.route('/json/cities')
+		.get(isLoggedIn, function (req, res) {
+			res.sendFile(path + '/public/json/cityph.json');
+		});
+		
+	app.route('/json/provinces')
+		.get(isLoggedIn, function (req, res) {
+			res.sendFile(path + '/public/json/provinceph.json');
+		});
+		
+	app.route('/json/regions')
+		.get(isLoggedIn, function (req, res) {
+			res.sendFile(path + '/public/json/regionph.json');
+		});
+		
+		
+		
 
-		
-		
-		
 
 	/***** APIs *****/
 	app.route('/api/manga')
