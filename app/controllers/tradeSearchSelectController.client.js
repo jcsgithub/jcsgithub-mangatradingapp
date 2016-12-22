@@ -152,7 +152,10 @@
          /***** CONTROLLER FUNCTIONS *****/
          $scope.submitRequest = function () {
             if ($scope.selectedVolumes.length) {
+               $scope.selectedVolumes.sort(function (a, b) { return a - b; });
+               
                $scope.loader.isSubmitting = true;
+               $('html,body').scrollTop(0);
                $('#requestModal').modal('hide'); 
                
                var newTrade = {
