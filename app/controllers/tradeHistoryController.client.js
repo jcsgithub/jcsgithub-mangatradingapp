@@ -140,6 +140,38 @@
             return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
          };
          
+         
+         $scope.generateVolumesDesc = function (volumes) {
+            var isFindingRightNum;
+            var previousValue = volumes[0];
+            var volumesDesc = '' + volumes[0];
+            
+            for (var i = 1; i < volumes.length; i++) {
+               var currentValue = volumes[i];
+               
+               if (previousValue + 1 === currentValue) {
+                  if (!isFindingRightNum) { // start of finding the right number
+                     isFindingRightNum = true;
+                     volumesDesc += '-';
+                  } else {
+                     if (i === volumes.length - 1) // last index and still finding the right number
+                        volumesDesc += currentValue;
+                  }
+               } else {
+                  if (isFindingRightNum) { // previous number is the right number, current value can be added with a comma
+                     isFindingRightNum = false;
+                     volumesDesc += previousValue + ',' + currentValue;
+                  } else { // normal comma separated value
+                     volumesDesc += ',' + currentValue;   
+                  }
+               }
+               
+               previousValue = currentValue;
+            }
+            
+            return volumesDesc;
+         }
+         
          $scope.getLocationLabel = function (citymunCode, provCode) {
             if (citymunCode && provCode && cities && provinces) {
                var cityIndex = cities.map(function (x) { return x.citymunCode; }).indexOf(citymunCode);
