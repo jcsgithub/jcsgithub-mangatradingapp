@@ -35,6 +35,37 @@
          
          
          /***** CONTROLLER FUNCTIONS *****/
+         function generateVolumesDesc (volumes) {
+            var isFindingRightNum;
+            var previousValue = volumes[0];
+            var volumesDesc = '' + volumes[0];
+            
+            for (var i = 1; i < volumes.length; i++) {
+               var currentValue = volumes[i];
+               
+               if (previousValue + 1 === currentValue) {
+                  if (!isFindingRightNum) { // start of finding the right number
+                     isFindingRightNum = true;
+                     volumesDesc += '-';
+                  } else {
+                     if (i === volumes.length - 1) // last index and still finding the right number
+                        volumesDesc += currentValue;
+                  }
+               } else {
+                  if (isFindingRightNum) { // previous number is the right number, current value can be added with a comma
+                     isFindingRightNum = false;
+                     volumesDesc += previousValue + ',' + currentValue;
+                  } else { // normal comma separated value
+                     volumesDesc += ',' + currentValue;   
+                  }
+               }
+               
+               previousValue = currentValue;
+            }
+            
+            return volumesDesc;
+         }
+         
          function getUser () {
             User.get().$promise.then(function (res) {
                $scope.user = res;
@@ -125,7 +156,7 @@
             }
             
             volumes.sort(function (a, b) { return a - b; }); // sort volumes in ascending order
-            add(volumes.unique(), $scope.addVolumes); // proceed to add
+            add(volumes.unique(), generateVolumesDesc(volumes.unique())); // proceed to add
          };
          
          $scope.searchFocus = function () {

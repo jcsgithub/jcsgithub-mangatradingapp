@@ -6,7 +6,7 @@
       .controller('tradeHistoryController', ['$http', '$q', '$resource', '$scope', '$timeout', function ($http, $q, $resource, $scope, $timeout) {
          console.log('tradeHistoryController')
          /***** INITIALIZE *****/
-         $scope.loader = { isLoadingData: true, isSubmitting: false };
+         $scope.loader = { isAccepting: false, isDeclining: false, isLoadingData: true };
          
          $scope.receivedTradesDone = [], $scope.sentTradesDone = [];
          $scope.receivedTradesPending = [], $scope.sentTradesPending = [];
@@ -166,7 +166,10 @@
          
          /***** CONTROLLER FUNCTIONS *****/
          $scope.accept = function (data) {
-            console.log('accept', data)
+            $('html,body').scrollTop(0);
+            
+            $scope.loader.isAccepting = true;
+            
             TradeUpdate.update({ id: data._id, newStatus: 'ACCEPTED' }, function (res) {
                alert('Request accepted!');
                location.reload();
@@ -176,7 +179,10 @@
          };
          
          $scope.decline = function (data) {
-            console.log('decline', data)
+            $('html,body').scrollTop(0);
+            
+            $scope.loader.isDeclining = true;
+            
             TradeUpdate.update({ id: data._id, newStatus: 'DECLINED' }, function (res) {
                alert('Request accepted!');
                location.reload();
