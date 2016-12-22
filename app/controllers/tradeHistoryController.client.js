@@ -4,7 +4,7 @@
    angular
       .module('MangaTradingApp', ['ngResource'])
       .controller('tradeHistoryController', ['$http', '$q', '$resource', '$scope', '$timeout', function ($http, $q, $resource, $scope, $timeout) {
-         console.log('tradeHistoryController')
+         
          /***** INITIALIZE *****/
          $scope.loader = { isAccepting: false, isDeclining: false, isLoadingData: true };
          

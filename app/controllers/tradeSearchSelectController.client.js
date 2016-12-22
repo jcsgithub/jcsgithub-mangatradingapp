@@ -75,6 +75,7 @@
          function getTradesByManga () {
             promises.push(TradesByManga.get({ mangaId: mangaId }).$promise.then(function (res) {
                trades = res.trades;
+               console.log(trades)
             }, function (err) {
                console.log('TradesByManga.get error', err)
             }));

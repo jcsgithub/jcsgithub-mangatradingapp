@@ -25,7 +25,7 @@ function TradeHandler () {
         var data = req.query;
         
         Trades
-            .find({ 'from': req.user._id, 'mangaId': data.mangaId })
+            .find({ 'from': req.user._id, 'mangaId': data.mangaId, 'status': 'PENDING' })
             .exec(function (err, result) {
                 if (err)  { throw err; }
                 
