@@ -122,6 +122,9 @@ module.exports = function (app, passport) {
 	app.route('/api/trade/manga')
 		.get(isAuthorized, tradeHandler.getTradesByManga);
 		
+	app.route('/api/trade/update')
+		.put(isAuthorized, tradeHandler.updateTrade);
+		
 	app.route('/api/trade/user')
 		.get(isAuthorized, tradeHandler.getTradesByUser);
 	

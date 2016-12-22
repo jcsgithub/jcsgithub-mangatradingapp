@@ -45,6 +45,18 @@ function TradeHandler () {
                 res.status(200).send({ trades: result });
             });
     };
+    
+    this.updateTrade = function (req, res) {
+        var data = req.body;
+        
+        Trades
+            .findByIdAndUpdate(data.id, { 'status': data.newStatus })
+            .exec(function (err, result) {
+                if (err)  { throw err; }
+                
+                res.sendStatus(200);
+            });
+    };
 }
 
 module.exports = TradeHandler;

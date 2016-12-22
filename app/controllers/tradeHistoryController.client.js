@@ -19,6 +19,11 @@
          
          var Manga = $resource('/api/manga');
          var TradesByUser = $resource('/api/trade/user');
+         var TradeUpdate = $resource(
+            '/api/trade/update',
+            {},
+            { update: { method: 'PUT' } }
+         );
          var User = $resource('/api/user');
             
          getLocation();
@@ -27,6 +32,12 @@
          
          $q.all(promises).then(function () {
             $scope.loader.isLoadingData = false;
+         
+            $timeout(function () {
+               $('.nav-tabs').removeClass('hide');
+               $('.tab-content').removeClass('hide');
+            }, 1)
+         
             generateTrades();
             getMangaDetails();
          }, function (err) {
@@ -154,12 +165,24 @@
          
          
          /***** CONTROLLER FUNCTIONS *****/
-         $scope.accept = function (index) {
-            
+         $scope.accept = function (data) {
+            console.log('accept', data)
+            TradeUpdate.update({ id: data._id, newStatus: 'ACCEPTED' }, function (res) {
+               alert('Request accepted!');
+               location.reload();
+            }, function (err) {
+               console.log('TradeUpdate.update error', err)
+            });
          };
          
-         $scope.decline = function (index) {
-             
+         $scope.decline = function (data) {
+            console.log('decline', data)
+            TradeUpdate.update({ id: data._id, newStatus: 'DECLINED' }, function (res) {
+               alert('Request accepted!');
+               location.reload();
+            }, function (err) {
+               console.log('TradeUpdate.update error', err)
+            });
          };
       }]);
 })();

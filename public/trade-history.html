@@ -69,13 +69,13 @@
 	<h4 class="manga-labels text-center" ng-if="loader.isDeclining" ng-cloak>Declining request <i class="fa fa-spinner fa-spin"></i></h4>
 
     <!-- Nav tabs -->
-    <ul ng-if="!loader.isLoadingData && !loader.isAccepting && !loader.isDeclining" class="nav nav-tabs" role="tablist">
-        <li role="tabnav" class="active"><a href="#receivedtrades" aria-controls="receivedtrades" role="tab" data-toggle="tab">Received Trades <span class="text-success" ng-cloak>({{receivedTrades.length + receivedTradesPending.length}})</span></a></li>
+    <ul ng-if="!loader.isLoadingData && !loader.isAccepting && !loader.isDeclining" class="nav nav-tabs hide" role="tablist">
+        <li role="tabnav" class="active"><a href="#receivedtrades" aria-controls="receivedtrades" role="tab" data-toggle="tab">Received Trades <span class="text-success" ng-cloak>({{receivedTradesDone.length + receivedTradesPending.length}})</span></a></li>
         <li role="tabnav"><a href="#senttrades" aria-controls="senttrades" role="tab" data-toggle="tab">Sent Trades <span class="text-success" ng-cloak>({{sentTradesDone.length + sentTradesPending.length}})</span></a></li>
     </ul>
     
     <!-- Tab panes -->
-    <div ng-if="!loader.isLoadingData && !loader.isAccepting && !loader.isDeclining" class="tab-content">
+    <div ng-if="!loader.isLoadingData && !loader.isAccepting && !loader.isDeclining" class="tab-content hide">
         
         <!-- START RECEIVED TRADES -->
         <div role="tabpanel" class="tab-pane fade in active" id="receivedtrades">
@@ -90,7 +90,7 @@
             				<div class="manga-container">
             					<h4 class="text-center text-info" ng-cloak>{{data.mangaDetails.name || data.mangaId}}</h4>
             					<h5>Date: {{convertDate(data.dateRequested) || 'Date requested'}}</h5>
-            					<h5 class="titlecase" ng-if="data.to._id !== user._id">From: {{data.from.facebook.displayName || 'Requested by'}}</h5>
+            					<h5 class="titlecase">From: {{data.from.facebook.displayName || 'Requested by'}}</h5>
             					<h5 class="titlecase">Location: {{getLocationLabel(data.from.location.city, data.from.location.province) || 'NOT AVAILABLE'}}</h5>
             					
             					<h6 class="text-center">Volumes requested</h6>
@@ -115,11 +115,11 @@
             <div class="manga">
                 <div class="row">
                     <div class="manga-collection">
-            			<div ng-repeat="data in receivedTradesPending track by $index" class="manga-item col-md-4 col-sm-6 col-xs-12" ng-cloak>
+            			<div ng-repeat="data in receivedTradesDone track by $index" class="manga-item col-md-4 col-sm-6 col-xs-12" ng-cloak>
             				<div class="manga-container">
             					<h4 class="text-center text-info" ng-cloak>{{data.mangaDetails.name || data.mangaId}}</h4>
             					<h5>Date: {{convertDate(data.dateRequested) || 'Date requested'}}</h5>
-            					<h5 class="titlecase" ng-if="data.to._id !== user._id">From: {{data.from.facebook.displayName || 'Requested by'}}</h5>
+            					<h5 class="titlecase">From: {{data.from.facebook.displayName || 'Requested by'}}</h5>
             					<h5 class="titlecase">Location: {{getLocationLabel(data.from.location.city, data.from.location.province) || 'NOT AVAILABLE'}}</h5>
             					
             					<h6 class="text-center">Volumes requested</h6>
@@ -151,7 +151,7 @@
             				<div class="manga-container">
             					<h4 class="text-center text-info" ng-cloak>{{data.mangaDetails.name || data.mangaId}}</h4>
             					<h5>Date: {{convertDate(data.dateRequested) || 'Date requested'}}</h5>
-            					<h5 class="titlecase" ng-if="data.to._id !== user._id">To: {{data.to.facebook.displayName || 'Requested to'}}</h5>
+            					<h5 class="titlecase">To: {{data.to.facebook.displayName || 'Requested to'}}</h5>
             					<h5 class="titlecase">Owner's Location: {{getLocationLabel(data.to.location.city, data.to.location.province) || 'NOT AVAILABLE'}}</h5>
             					
             					<h6 class="text-center">Volumes requested</h6>
@@ -175,7 +175,7 @@
             				<div class="manga-container">
             					<h4 class="text-center text-info" ng-cloak>{{data.mangaDetails.name || data.mangaId}}</h4>
             					<h5>Date: {{convertDate(data.dateRequested) || 'Date requested'}}</h5>
-            					<h5 class="titlecase" ng-if="data.to._id !== user._id">To: {{data.to.facebook.displayName || 'Requested to'}}</h5>
+            					<h5 class="titlecase">To: {{data.to.facebook.displayName || 'Requested to'}}</h5>
             					<h5 class="titlecase">Owner's Location: {{getLocationLabel(data.to.location.city, data.to.location.province) || 'NOT AVAILABLE'}}</h5>
             					
             					<h6 class="text-center">Volumes requested</h6>
