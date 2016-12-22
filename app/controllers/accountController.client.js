@@ -24,7 +24,7 @@
          
          /***** CONTROLLER FUNCTIONS *****/
          function getInitialData () {
-            var src = 'https://jcsgithub-mangatradingapp-jcsgithub.c9users.io/json'
+            var src = 'https://jcsgithub-mangatradingapp.herokuapp.com/json'
             
             $q.all([
                

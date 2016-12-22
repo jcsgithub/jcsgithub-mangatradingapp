@@ -48,7 +48,7 @@
          
          /***** CONTROLLER FUNCTIONS *****/
          function getLocation () {
-            var src = 'https://jcsgithub-mangatradingapp-jcsgithub.c9users.io/json';
+            var src = 'https://jcsgithub-mangatradingapp.herokuapp.com/json';
             
             // get provinces
             promises.push($http.get(src + '/provinces')
