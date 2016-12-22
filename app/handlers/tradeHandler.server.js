@@ -20,11 +20,25 @@ function TradeHandler () {
 			res.sendStatus(200);
 		});
     };
-    this.getTrades = function (req, res) {
+    
+    this.getTradesByManga = function (req, res) {
         var data = req.query;
         
         Trades
             .find({ 'from': req.user._id, 'mangaId': data.mangaId })
+            .exec(function (err, result) {
+                if (err)  { throw err; }
+                
+                res.status(200).send({ trades: result });
+            });
+    };
+    
+    this.getTradesByUser = function (req, res) {
+        Trades
+            .find({ $or:[ { 'from': req.user._id }, { 'to': req.user._id }]})
+            .populate('from', 'facebook.displayName location')
+            .populate('to', 'facebook.displayName location')
+            .sort('-dateRequested')
             .exec(function (err, result) {
                 if (err)  { throw err; }
                 

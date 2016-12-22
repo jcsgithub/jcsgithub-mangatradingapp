@@ -33,13 +33,13 @@
          var Manga = $resource('/api/manga');
          var MangaOwners = $resource('/api/manga/owners/:mangaId');
          var NewTrade = $resource('/api/trade/new');
-         var Trades = $resource('/api/trade/user');
+         var TradesByManga = $resource('/api/trade/manga');
          var User = $resource('/api/user');
             
          getLocation();
          getMangaDetails();
          getMangaOwners();
-         getTrades();
+         getTradesByManga();
          getUser();
          
          $q.all(promises).then(function () {
@@ -72,11 +72,11 @@
                }));   
          }
          
-         function getTrades () {
-            promises.push(Trades.get({ mangaId: mangaId }).$promise.then(function (res) {
+         function getTradesByManga () {
+            promises.push(TradesByManga.get({ mangaId: mangaId }).$promise.then(function (res) {
                trades = res.trades;
             }, function (err) {
-               console.log('Trades.get error', err)
+               console.log('TradesByManga.get error', err)
             }));
          }
          
@@ -121,7 +121,7 @@
          }
          
          $scope.getLocationLabel = function (citymunCode, provCode) {
-            if (citymunCode && provCode) {
+            if (citymunCode && provCode && cities && provinces) {
                var cityIndex = cities.map(function (x) { return x.citymunCode; }).indexOf(citymunCode);
                var provinceIndex = provinces.map(function (x) { return x.provCode; }).indexOf(provCode);
                

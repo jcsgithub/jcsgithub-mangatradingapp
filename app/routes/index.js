@@ -64,6 +64,11 @@ module.exports = function (app, passport) {
 			res.sendFile(path + '/public/manga-collection.html');
 		});
 		
+	app.route('/trade/history')
+		.get(isLoggedIn, function (req, res) {
+			res.sendFile(path + '/public/trade-history.html');
+		});
+		
 	app.route('/trade/search')
 		.get(isLoggedIn, function (req, res) {
 			res.sendFile(path + '/public/trade-search.html');
@@ -114,8 +119,11 @@ module.exports = function (app, passport) {
 	app.route('/api/trade/new')
 		.post(isAuthorized, tradeHandler.addTrade);
 		
+	app.route('/api/trade/manga')
+		.get(isAuthorized, tradeHandler.getTradesByManga);
+		
 	app.route('/api/trade/user')
-		.get(isAuthorized, tradeHandler.getTrades);
+		.get(isAuthorized, tradeHandler.getTradesByUser);
 	
     app.route('/api/user')
         .get(isAuthorized, function (req, res) {
